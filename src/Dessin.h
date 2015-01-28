@@ -5,6 +5,7 @@
 #include "ofMain.h"
 #include "Camera.h"
 #include "GpuProcess.h"
+#include "Forme.h"
 
 
 
@@ -26,9 +27,8 @@ class Dessin
     private:
     
         GpuProcess process;
+        Forme forme;
     
-        ofFbo fbo1, fbo2;
-        ofShader shader;
 
 };
 

@@ -11,18 +11,18 @@ class Forme
         Forme();
         virtual ~Forme();
         void setup(unsigned int nb = 1);
-        void update();
-        void draw(Camera *camera);
+        void draw(Camera *camera, ofTexture& texPos);
 
     protected:
     private:
 
         ofMatrix4x4 model;
         ofShader shader;
-        ofVbo mesh;
-    
-        unsigned int nbPoints;
+        ofVboMesh mesh;
+        ofFbo fbo;
 
+        int textureRes;
+        float cpt;
 
 };
 

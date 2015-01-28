@@ -4,6 +4,7 @@ layout(triangle_strip, max_vertices=3) out;
 
 in vec4 geomColor[];
 in float geomZ[];
+
 out vec4 fragColor;
 
 

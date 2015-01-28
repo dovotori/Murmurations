@@ -22,23 +22,15 @@ void GpuProcess::setup(unsigned int nb)
     this->particleSize = 1.0f;
     this->timeStep = 0.005f;
     this->numParticles = nb;
-    
-    this->width = ofGetWindowWidth();
-    this->height = ofGetWindowHeight();
 
     this->textureRes = (int)sqrt((float)this->numParticles);      // Definir la resolution de la texture en fonction du nombre de particules
     this->numParticles = this->textureRes * this->textureRes;     // Redefinir le nombre de particules (pas de gachis)
+    
     cout << "nombre de particules: " << this->numParticles << endl;
     cout << "resolution de la texture: " << this->textureRes << endl;
     
     this->setupPosition();
     this->setupVelocity();
-    this->setupRender();
-    
-    
-    this->cpt = 0.0;
-    this->model.makeIdentityMatrix();
-    
     
 }
 
@@ -93,32 +85,6 @@ void GpuProcess::setupVelocity()
 
 
 
-void GpuProcess::setupRender()
-{
-    // SHADER
-    //this->updateRender.setGeometryInputType(GL_POINTS);
-    //this->updateRender.setGeometryOutputType(GL_TRIANGLE_STRIP);
-    //this->updateRender.setGeometryOutputCount(6);
-    this->updateRender.load("shader/render.vert", "shader/render.frag", "shader/render.geom");
-    
-    // CHARGER FBO
-    this->renderFBO.allocate(this->width, this->height, GL_RGB32F);
-    this->renderFBO.begin();
-        ofClear(0, 0, 0, 255);
-    this->renderFBO.end();
-    
-    // CREER MESH
-    this->mesh.setMode(OF_PRIMITIVE_POINTS);
-    for(int x = 0; x < this->textureRes; x++){
-        for(int y = 0; y < this->textureRes; y++){
-            this->mesh.addVertex(ofVec3f(x,y));
-            this->mesh.addTexCoord(ofVec2f(x, y));
-        }
-    }
-
-}
-
-
 
 
 
@@ -138,6 +104,7 @@ void GpuProcess::update()
 
 void GpuProcess::computeGpuVelocity()
 {
+    
     this->velPingPong.dst->begin();
     
         ofClear(0);
@@ -166,7 +133,6 @@ void GpuProcess::computeGpuVelocity()
 void GpuProcess::computeGpuPosition()
 {
     
-    // With the velocity calculated updates the position
     this->posPingPong.dst->begin(); // fbo
     
         ofClear(0);
@@ -189,54 +155,6 @@ void GpuProcess::computeGpuPosition()
 
 
 
-
-
-
-/*/////////////// DRAW /////////////// */
-
-
-
-void GpuProcess::draw(Camera* camera)
-{
-    this->renderTextureScene(camera);
-    this->renderFBO.draw(0,0);
-    //this->posPingPong.dst->draw(0, 0);
-}
-
-
-
-void GpuProcess::renderTextureScene(Camera* camera)
-{
-    this->cpt += 0.4;
-    this->model.makeIdentityMatrix();
-    this->model.rotate(this->cpt, 1.0, 1.0, 0.0);
-    
-
-    this->renderFBO.begin();
-    
-        ofClear(0,0,0,0);
-    
-        this->updateRender.begin();
-        
-            this->updateRender.setUniformTexture("posTex", this->posPingPong.dst->getTextureReference(), 0);
-            this->updateRender.setUniform1f("resolution", (float)this->textureRes);
-            this->updateRender.setUniform3f("screen", 100.0, 100.0, 100.0); // taille de l'espace 3D des particules
-            this->updateRender.setUniformMatrix4f("model", this->model);
-            this->updateRender.setUniformMatrix4f("view", camera->getViewMatrix());
-            this->updateRender.setUniformMatrix4f("projection", camera->getProjectionMatrix());
-    
-            ofPushStyle();
-            
-            this->mesh.draw();
-            
-            glEnd();
-            
-        this->updateRender.end();
-    
-    this->renderFBO.end();
-    
-    ofPopStyle();
-}
 
 
 
