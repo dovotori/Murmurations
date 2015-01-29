@@ -17,7 +17,7 @@ class Forme
     private:
 
         ofMatrix4x4 model;
-        ofShader shader;
+        ofShader shader, postShader;
         ofVboMesh mesh;
         ofFbo fbo;
 

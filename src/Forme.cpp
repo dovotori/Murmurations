@@ -17,6 +17,7 @@ void Forme::setup(unsigned int nb)
 {
 
     this->shader.load("shader/renderLigne.vert", "shader/renderLigne.frag", "shader/renderLigne.geom");
+    this->postShader.load("shader/basic.vert", "shader/postRender.frag");
     
     this->textureRes = (int)sqrt((float)nb);      // Definir la resolution de la texture en fonction du nombre de particules
     
@@ -27,6 +28,7 @@ void Forme::setup(unsigned int nb)
     this->fbo.end();
     
     // CREER MESH
+    this->mesh.setMode(OF_PRIMITIVE_LINES); // IMPORTANT doit etre raccord avec le geometry shader
     for(int x = 0; x < this->textureRes; x++){
         for(int y = 0; y < this->textureRes; y++)
         {
@@ -55,12 +57,13 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
     this->fbo.begin();
     
       ofClear(0,0,0,0);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
         this->shader.begin();
 
             this->shader.setUniformTexture("posTex", texPos, 0);
             this->shader.setUniform1f("resolution", (float)this->textureRes);
-            this->shader.setUniform3f("screen", 100.0, 100.0, 100.0); // taille de l'espace 3D des particules
+            this->shader.setUniform3f("screen", 40.0, 40.0, 40.0); // taille de l'espace 3D des particules
             this->shader.setUniformMatrix4f("model", this->model);
             this->shader.setUniformMatrix4f("view", camera->getViewMatrix());
             this->shader.setUniformMatrix4f("projection", camera->getProjectionMatrix());
@@ -72,7 +75,12 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
     this->fbo.end();
     
     
-    this->fbo.draw(0, 0); // on dessine
+    this->postShader.begin();
+        this->postShader.setUniform1f("cpt", this->cpt);
+        this->postShader.setUniformTexture("fboTexture", this->fbo.getTextureReference(0), 0);
+        this->postShader.setUniform2f("resolution", ofGetWindowWidth(), ofGetWindowHeight());
+        this->fbo.draw(0, 0); // on dessine
+    this->postShader.end();
 }
 
 
