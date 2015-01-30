@@ -9,7 +9,6 @@
 
 
 
-
 class GpuProcess
 {
 public:
@@ -17,29 +16,29 @@ public:
     virtual ~GpuProcess();
     void setup(unsigned int nb = 1);
     void update();
-    
+
     inline ofTexture& getPosTexture(){ return this->posPingPong.dst->getTextureReference(); };
-    
+    inline void setComportement(unsigned int comportement){ this->comportement = comportement; };
+
 protected:
 private:
-    ofShader    updatePos;
-    ofShader    updateVel;
-    
-    pingPongBuffer posPingPong;
-    pingPongBuffer velPingPong;
-    
-    float   timeStep;
-    float   particleSize;
-    
-    int     numParticles;
-    int     textureRes;
-    
     void setupPosition();
     void setupVelocity();
-    
+
     void computeGpuPosition();
     void computeGpuVelocity();
-    
+
+    ofShader updatePos;
+    ofShader* updateVel;
+
+    pingPongBuffer posPingPong;
+    pingPongBuffer velPingPong;
+
+    float   vitesseGenerale;
+    int     numParticles;
+    int     textureRes;
+    unsigned int comportement;
+
 };
 
 #endif

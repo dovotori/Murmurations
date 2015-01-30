@@ -26,7 +26,7 @@ void main() {
 
 	// alpha
 	float alpha = n;
-	//if(color.x > 0.0){ alpha = 1.0; }
+	if(color.x > 0.0){ alpha = 1.0; }
 
     outputColor = vec4(color.xyz, alpha);
     //outputColor = vec4(vec3(n), 1.0);

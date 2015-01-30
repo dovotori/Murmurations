@@ -9,32 +9,27 @@ out vec4 fragColor;
 
 
 
-
-
-
 void main()
-{   
+{
+
 	vec4 pos = gl_in[0].gl_Position;
-
-    fragColor = geomColor[0] * geomZ[0];
-    fragColor.a = 1.0;
-
     float taille = 0.2 + (geomZ[0] * 4.0);
 
     
     gl_Position = pos;
+    fragColor = vec4(geomColor[0].xyz * geomZ[0], 1.0);
     EmitVertex();
 
     pos.x += taille;
     gl_Position = pos;
+    fragColor = vec4(geomColor[0].xyz * geomZ[0], 1.0);
     EmitVertex();
 
     pos.y += taille;
     gl_Position = pos;
+    fragColor = vec4(geomColor[0].xyz * geomZ[0], 1.0);
     EmitVertex();
 
     EndPrimitive();
-
-
 
 }

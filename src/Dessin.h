@@ -20,17 +20,18 @@ class Dessin
         void update();
         void draw(Camera* camera);
 
+        void keyReleased(int key);
         void mouseDragged(int x, int y);
         void mousePressed();
         void mouseReleased();
 
     protected:
     private:
-    
+
         GpuProcess process;
         Forme forme;
         Background background;
-    
+
 
 };
 
