@@ -18,6 +18,7 @@ void Dessin::setup()
     
     this->process.setup(NB);
     this->forme.setup(NB);
+    this->background.setup();
     
 }
 
@@ -32,6 +33,7 @@ void Dessin::update()
 
 void Dessin::draw(Camera* camera)
 {
+    this->background.draw();
     this->forme.draw(camera, this->process.getPosTexture());
 }
 

@@ -24,7 +24,11 @@ void main() {
 	float n = random( vec2( 1.0 ), length( st ), st*evolution ); // noise
 	n = 0.2 + n * 0.8; // attenuation du noise
 
-    outputColor = vec4(color.xyz * n, 1.0);
+	// alpha
+	float alpha = n;
+	//if(color.x > 0.0){ alpha = 1.0; }
+
+    outputColor = vec4(color.xyz, alpha);
     //outputColor = vec4(vec3(n), 1.0);
 
 }

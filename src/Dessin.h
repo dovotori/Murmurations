@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "GpuProcess.h"
 #include "Forme.h"
+#include "Background.h"
 
 
 
@@ -28,6 +29,7 @@ class Dessin
     
         GpuProcess process;
         Forme forme;
+        Background background;
     
 
 };

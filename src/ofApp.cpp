@@ -7,7 +7,7 @@ void ofApp::setup(){
     ofSetFrameRate(40);
     //ofSetVerticalSync(false);
     //ofEnableDepthTest(); // si actif ca desactive le blend mode c'est chiant
-    //ofEnableAlphaBlending();
+    ofEnableAlphaBlending();
     //ofSetBackgroundAuto(false); // empeche le rafraichissement des buffer automatique (dissine en superposant)
     ofDisableArbTex(); // pour utiliser sampler2D dans les shaders
     

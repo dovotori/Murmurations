@@ -26,6 +26,7 @@
 		B8481AF11A5F00FD001E79AB /* ofxOscReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8481AE11A5F00FD001E79AB /* ofxOscReceiver.cpp */; };
 		B8481AF21A5F00FD001E79AB /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8481AE31A5F00FD001E79AB /* ofxOscSender.cpp */; };
 		B87C25611A600F250044BDDD /* GpuProcess.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B87C255F1A600F250044BDDD /* GpuProcess.cpp */; };
+		B8E8CB271A7B7B4200ABEC7C /* Background.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8E8CB251A7B7B4200ABEC7C /* Background.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -124,6 +125,8 @@
 		B87C25581A5FF0C40044BDDD /* MurmurationsGPU7Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MurmurationsGPU7Debug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B87C255F1A600F250044BDDD /* GpuProcess.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GpuProcess.cpp; sourceTree = "<group>"; };
 		B87C25601A600F250044BDDD /* GpuProcess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GpuProcess.h; sourceTree = "<group>"; };
+		B8E8CB251A7B7B4200ABEC7C /* Background.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Background.cpp; sourceTree = "<group>"; };
+		B8E8CB261A7B7B4200ABEC7C /* Background.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Background.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -351,6 +354,8 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				B8E8CB251A7B7B4200ABEC7C /* Background.cpp */,
+				B8E8CB261A7B7B4200ABEC7C /* Background.h */,
 				B80C61921A72BBCF00945C40 /* PingPongBuffer.h */,
 				B87C255F1A600F250044BDDD /* GpuProcess.cpp */,
 				B87C25601A600F250044BDDD /* GpuProcess.h */,
@@ -486,6 +491,7 @@
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				B8481AEB1A5F00FD001E79AB /* OscPrintReceivedElements.cpp in Sources */,
 				B8481AF01A5F00FD001E79AB /* ofxOscParameterSync.cpp in Sources */,
+				B8E8CB271A7B7B4200ABEC7C /* Background.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

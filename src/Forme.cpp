@@ -57,13 +57,12 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
     this->fbo.begin();
     
       ofClear(0,0,0,0);
-      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
         this->shader.begin();
 
             this->shader.setUniformTexture("posTex", texPos, 0);
             this->shader.setUniform1f("resolution", (float)this->textureRes);
-            this->shader.setUniform3f("screen", 40.0, 40.0, 40.0); // taille de l'espace 3D des particules
+            this->shader.setUniform3f("screen", 60.0, 60.0, 60.0); // taille de l'espace 3D des particules
             this->shader.setUniformMatrix4f("model", this->model);
             this->shader.setUniformMatrix4f("view", camera->getViewMatrix());
             this->shader.setUniformMatrix4f("projection", camera->getProjectionMatrix());
