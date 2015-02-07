@@ -16,6 +16,7 @@ public:
     virtual ~GpuProcess();
     void setup(unsigned int nb = 1);
     void update();
+    void resetPosition();
 
     inline ofTexture& getPosTexture(){ return this->posPingPong.dst->getTextureReference(); };
     inline void setComportement(unsigned int comportement){ this->comportement = comportement; };

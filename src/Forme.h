@@ -31,7 +31,10 @@ class Forme
                     break;
             }
         };
-
+        inline void setNoiseInfluence(float value){ this->noiseInfluence = value; };
+        inline float getNoiseInfluence(){ return this->noiseInfluence; };
+        inline void addRotation(float value){ this->rotation += value; };
+    
     protected:
     private:
 
@@ -44,6 +47,8 @@ class Forme
         unsigned int textureRes;
         unsigned int rendu;
         float cpt;
+        float noiseInfluence;
+        float rotation;
 
 };
 

@@ -21,6 +21,7 @@ class Dessin
         void draw(Camera* camera);
 
         void keyReleased(int key);
+        void keyPressed(int key);
         void mouseDragged(int x, int y);
         void mousePressed();
         void mouseReleased();

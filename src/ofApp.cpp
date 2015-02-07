@@ -34,14 +34,31 @@ void ofApp::draw(){
     this->dessin.draw(&this->camera);
 
     stringstream ss;
-    ss << ofGetFrameRate() << " fps";
-    ofDrawBitmapString(ss.str(), ofPoint( 10, ofGetWindowHeight()-10 ) );
+    ss << "Options clavier" << endl << endl;
+    ss << "N \t\t- Influence du noise" << endl;
+    ss << "1 \t\t- Comportement flocking" << endl;
+    ss << "2 \t\t- Comportement lineaire" << endl;
+    ss << "3 \t\t- Comportement attraction" << endl;
+    ss << "A Z E R T \t- Types de rendu" << endl;
+    ss << "LEFT RIGHT \t- Rotation des particules" << endl;
+    ss << "UP DOWN \t- Zoom in out" << endl;
+    ss << endl << ofGetFrameRate() << " fps";
+    ofDrawBitmapString(ss.str(), ofPoint( 10, ofGetWindowHeight()-140 ) );
 
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    this->dessin.keyPressed(key);
+    if(key == 357) { // haut
+        cout << "Camera forward" << endl;
+        ofVec3f cPos = this->camera.getPosition();
+        if(cPos.z > 50.0){ this->camera.setPosition(cPos.x, cPos.y, cPos.z-2.0); }
+    } else if(key == 359) { // bas
+        cout << "Camera backward" << endl;
+        ofVec3f cPos = this->camera.getPosition();
+        if(cPos.z < 1000.0){ this->camera.setPosition(cPos.x, cPos.y, cPos.z+2.0); }
+    }
 }
 
 //--------------------------------------------------------------

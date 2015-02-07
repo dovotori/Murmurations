@@ -13,22 +13,21 @@ void main()
 {
 
 	vec4 pos = gl_in[0].gl_Position;
-    //float taille = 0.2 + (geomZ[0] * 4.0);
-    float taille = 1.2;
-
+    float taille = 0.2 + (geomZ[0] * 4.0);
+    float alpha = 0.2 + (geomZ[0] * 0.8);
     
     gl_Position = pos;
-    fragColor = vec4(geomColor[0].xyz, 1.0);
+    fragColor = vec4(geomColor[0].xyz, alpha);
     EmitVertex();
 
     pos.x += taille;
     gl_Position = pos;
-    fragColor = vec4(geomColor[0].xyz, 1.0);
+    fragColor = vec4(geomColor[0].xyz, alpha);
     EmitVertex();
 
     pos.y += taille;
     gl_Position = pos;
-    fragColor = vec4(geomColor[0].xyz, 1.0);
+    fragColor = vec4(geomColor[0].xyz, alpha);
     EmitVertex();
 
     EndPrimitive();

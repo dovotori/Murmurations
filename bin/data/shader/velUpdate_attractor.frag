@@ -16,7 +16,7 @@ vec3 attract(vec3 pos, vec3 vel)
 	float strength = 1.0;
 	float ramp = 1.0;
 
-	vec3 positionAttractor = vec3(0.5, 0.5, 0.0);
+	vec3 positionAttractor = vec3(0.5, 0.5, 0.5);
 	vec3 d = positionAttractor - pos;
     float distance = length(d);
 
