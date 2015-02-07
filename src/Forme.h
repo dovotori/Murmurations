@@ -5,6 +5,13 @@
 #include "Camera.h"
 
 
+/*
+ RENDU
+ 0 FORME A PARTIR D'UN POINT
+ 1 LIGNES
+ 2 POINTS
+ */
+
 class Forme
 {
     public:
@@ -12,16 +19,30 @@ class Forme
         virtual ~Forme();
         void setup(unsigned int nb = 1);
         void draw(Camera *camera, ofTexture& texPos);
+    
+        inline void setRendu(unsigned int rendu) {
+            this->rendu = rendu;
+            switch(rendu) {
+                case 1:
+                    this->mesh.setMode(OF_PRIMITIVE_LINES);
+                    break;
+                default:
+                    this->mesh.setMode(OF_PRIMITIVE_POINTS);
+                    break;
+            }
+        };
 
     protected:
     private:
 
         ofMatrix4x4 model;
-        ofShader shader, postShader;
+        ofShader *shader;
+        ofShader postShader;
         ofVboMesh mesh;
         ofFbo fbo;
 
-        int textureRes;
+        unsigned int textureRes;
+        unsigned int rendu;
         float cpt;
 
 };

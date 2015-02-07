@@ -20,8 +20,8 @@ void main() {
 
 	vec4 color = texture( fboTexture, st );
 
-	float evolution = 0.5 + (cos(cpt * 0.1) * 0.5); 
-	float n = random( vec2( 1.0 ), length( st ), st*evolution ); // noise
+	float evolution = 0.5 + (cos(cpt) * 0.5); 
+	float n = random( vec2( 4.1 ), length( st ), st * evolution ); // noise // scale est cool, fait du moirage en dessous de 1
 	n = 0.2 + n * 0.8; // attenuation du noise
 
 	// alpha

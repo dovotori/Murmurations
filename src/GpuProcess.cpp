@@ -20,10 +20,9 @@ GpuProcess::~GpuProcess()
 
 void GpuProcess::setup(unsigned int nb)
 {
-    this->vitesseGenerale = 0.005f;
+    this->vitesseGenerale = 0.005;
     this->numParticles = nb;
-    this->comportement = 0
-    ;
+    this->comportement = 0;
 
     this->textureRes = (int)sqrt((float)this->numParticles);      // Definir la resolution de la texture en fonction du nombre de particules
     this->numParticles = this->textureRes * this->textureRes;     // Redefinir le nombre de particules (pas de gachis)
@@ -49,8 +48,8 @@ void GpuProcess::setupPosition()
         for (int y = 0; y < this->textureRes; y++){
             int i = this->textureRes * y + x;
 
-            pos[i*3 + 0] = 0.5; //ofRandom(0.0, 1.0); // couleur est entre 0 et 1
-            pos[i*3 + 1] = 0.5; //ofRandom(0.0, 1.0);
+            pos[i*3 + 0] = 0.5; //ofMap(x, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0); // couleur est entre 0 et 1
+            pos[i*3 + 1] = 0.5; //ofMap(y, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0);
             pos[i*3 + 2] = 0.5; //ofRandom(0.0, 1.0);
         }
     }
@@ -69,8 +68,8 @@ void GpuProcess::setupVelocity()
 {
     // SHADER
     this->updateVel = new ofShader[3];
-    this->updateVel[0].load("shader/basic.vert","shader/velUpdate_flock.frag"); // shader for updating the texture that store the particles velocity on RG channels
-    this->updateVel[1].load("shader/basic.vert","shader/velUpdate_pong.frag");
+    this->updateVel[0].load("shader/basic.vert","shader/velUpdate_flock.frag");
+    this->updateVel[1].load("shader/basic.vert","shader/velUpdate_noise.frag");
     this->updateVel[2].load("shader/basic.vert","shader/velUpdate_attractor.frag");
 
     // COOR
@@ -146,7 +145,7 @@ void GpuProcess::computeGpuPosition()
 
             this->updatePos.setUniformTexture("prevPosData", this->posPingPong.src->getTextureReference(), 0); // Précendentes positions
             this->updatePos.setUniformTexture("velData", this->velPingPong.src->getTextureReference(), 1);  // Vitesses
-            this->updatePos.setUniform1f("timestep", (float)this->vitesseGenerale );
+            this->updatePos.setUniform1f("timestep", this->vitesseGenerale );
             this->updatePos.setUniform1i("resolution", (int)this->textureRes);
             this->posPingPong.src->draw(0, 0); // draw fbo source dans le fbo destination
 

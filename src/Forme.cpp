@@ -13,8 +13,12 @@ Forme::~Forme()
 
 void Forme::setup(unsigned int nb)
 {
+    this->rendu = 0;
 
-    this->shader.load("shader/render.vert", "shader/render.frag", "shader/render.geom");
+    this->shader = new ofShader[3];
+    this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderForme.geom");
+    this->shader[1].load("shader/render.vert", "shader/render.frag", "shader/renderLigne.geom");
+    this->shader[2].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
     this->postShader.load("shader/basic.vert", "shader/postRender.frag");
 
     this->textureRes = (int)sqrt((float)nb);      // Definir la resolution de la texture en fonction du nombre de particules
@@ -50,28 +54,29 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
 {
     this->cpt += 0.4;
     this->model.makeIdentityMatrix();
-    this->model.rotate(this->cpt, 1.0, 1.0, 0.0);
+    //this->model.rotate(this->cpt, 1.0, 1.0, 0.0);
 
     this->fbo.begin();
 
       ofClear(0,0,0,0);
 
-        this->shader.begin();
+        this->shader[this->rendu].begin();
 
-            this->shader.setUniformTexture("posTex", texPos, 0);
-            this->shader.setUniform1f("resolution", (float)this->textureRes);
-            this->shader.setUniform3f("screen", 40.0, 40.0, 40.0); // taille de l'espace 3D des particules
-            this->shader.setUniformMatrix4f("model", this->model);
-            this->shader.setUniformMatrix4f("view", camera->getViewMatrix());
-            this->shader.setUniformMatrix4f("projection", camera->getProjectionMatrix());
+            this->shader[this->rendu].setUniformTexture("posTex", texPos, 0);
+            this->shader[this->rendu].setUniform1f("resolution", (float)this->textureRes);
+            this->shader[this->rendu].setUniform3f("screen", 40.0, 40.0, 40.0); // taille de l'espace 3D des particules
+            this->shader[this->rendu].setUniformMatrix4f("model", this->model);
+            this->shader[this->rendu].setUniformMatrix4f("view", camera->getViewMatrix());
+            this->shader[this->rendu].setUniformMatrix4f("projection", camera->getProjectionMatrix());
 
             this->mesh.draw();
 
-        this->shader.end();
+        this->shader[this->rendu].end();
 
     this->fbo.end();
 
 
+    // noise effect
     this->postShader.begin();
         this->postShader.setUniform1f("cpt", this->cpt);
         this->postShader.setUniformTexture("fboTexture", this->fbo.getTextureReference(0), 0);
