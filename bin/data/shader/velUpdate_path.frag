@@ -72,22 +72,34 @@ vec3 followPath(vec3 pos, vec3 vel)
 
     
     int i;
-    for(i = 0; i < pointsPath.length()-1; i++)
+    for(i = 0; i < pointsPath.length(); i++)
     {
         vec3 a = pointsPath[i];
-        vec3 b = pointsPath[i+1];
+        vec3 b = pointsPath[(i+1)%pointsPath.length()];
         
         vec3 normalPoint = getPathTarget(predictionPos, a, b);
 
-        if (normalPoint.x < a.x || normalPoint.x > b.x) { // hors du path
+        vec3 dir = b - a;
+        if (normalPoint.x < min(a.x,b.x) || normalPoint.x > max(a.x,b.x) 
+        || normalPoint.y < min(a.y,b.y) || normalPoint.y > max(a.y,b.y)
+        || normalPoint.z < min(a.z,b.z) || normalPoint.z > max(a.z,b.z)) {
+            
             normalPoint = b;
+            // hors du segment, on prend le suivant
+            a = pointsPath[(i+1)%pointsPath.length()];
+            b = pointsPath[(i+2)%pointsPath.length()];
+            dir = b - a;
         }
 
         float distance = length(predictionPos - normalPoint);
 
         if (distance < distancePlusProche) {
             distancePlusProche = distance;
+            
             destination = normalPoint;
+            
+            vec3 decalageAvant = normalize(dir) * 2.0; 
+            destination += decalageAvant;
         }
     }
     
