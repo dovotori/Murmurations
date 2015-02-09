@@ -17,19 +17,18 @@ vec3 attract(vec3 pos, vec3 vel)
 	float ramp = 1.0;
 
 	vec3 positionAttractor = vec3(0.5, 0.5, 0.5);
-	vec3 d = positionAttractor - pos;
-    float distance = length(d);
+	vec3 dif = positionAttractor - pos;
+    float distance = length(dif);
 
-    if(distance > 0 && distance < radious)
+    if(distance > 0 && distance < radious && radious > 0.0)
     {
-        float s = distance / radious;
-        float force = 1.0 / pow(s, (0.5 * ramp)) - 1.0;
-        force = strength * force / radious;
-
-        return vel + (d * force);
+        float t = pow((distance/radious), ramp);
+        float force = (1.0 / t) - 1.0;
+        return vel + (dif * force);
     } else {
     	return vel;
     }
+
 }
 
 

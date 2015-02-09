@@ -41,7 +41,7 @@ void GpuProcess::setupPosition()
 {
     // SHADER
     this->updatePos.load("shader/basic.vert", "shader/posUpdate.frag");// shader for updating the texture that store the particles position on RG channels
-    
+
     // CHARGER DANS UNE FBO TEXTURE
     this->posPingPong.allocate(this->textureRes, this->textureRes, GL_RGB32F);
     this->resetPosition();
@@ -54,10 +54,11 @@ void GpuProcess::setupPosition()
 void GpuProcess::setupVelocity()
 {
     // SHADER
-    this->updateVel = new ofShader[3];
+    this->updateVel = new ofShader[4];
     this->updateVel[0].load("shader/basic.vert","shader/velUpdate_flock.frag");
     this->updateVel[1].load("shader/basic.vert","shader/velUpdate_noise.frag");
     this->updateVel[2].load("shader/basic.vert","shader/velUpdate_attractor.frag");
+    this->updateVel[3].load("shader/basic.vert","shader/velUpdate_path.frag");
 
     // COOR
     float * vel = new float[this->numParticles*3];
@@ -85,7 +86,7 @@ void GpuProcess::resetPosition()
     for (int x = 0; x < this->textureRes; x++){
         for (int y = 0; y < this->textureRes; y++){
             int i = this->textureRes * y + x;
-            
+
             pos[i*3 + 0] = 0.5; //ofMap(x, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0); // couleur est entre 0 et 1
             pos[i*3 + 1] = 0.5; //ofMap(y, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0);
             pos[i*3 + 2] = 0.5; //ofRandom(0.0, 1.0);

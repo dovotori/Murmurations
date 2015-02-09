@@ -62,6 +62,9 @@ void Dessin::keyReleased(int key){
     } else if(key == 51) { // 3
             cout << "Comportement Attraction actif" << endl;
             this->process.setComportement(2);
+    } else if(key == 52) { // 4
+            cout << "Comportement Path actif" << endl;
+            this->process.setComportement(3);
 
     } else if(key == 97) { // a
         cout << "Rendu Ligne actif" << endl;
@@ -78,7 +81,7 @@ void Dessin::keyReleased(int key){
     } else if(key == 116) { // t
         cout << "Rendu Image actif" << endl;
         this->forme.setRendu(4);
-    
+
     } else if(key == 127) { // delete
         cout << "Reset position" << endl;
         this->process.resetPosition();
@@ -87,7 +90,7 @@ void Dessin::keyReleased(int key){
         else if (this->forme.getNoiseInfluence() == 0.5){ this->forme.setNoiseInfluence(1.0); cout << "Noise influence: " << 1.0 << endl; }
         else if (this->forme.getNoiseInfluence() == 1.0){ this->forme.setNoiseInfluence(2.0); cout << "Noise influence: " << 2.0 << endl; }
         else if (this->forme.getNoiseInfluence() == 2.0){ this->forme.setNoiseInfluence(0.0); cout << "Noise influence: " << 0.0 << endl; }
-    
+
     }
 }
 

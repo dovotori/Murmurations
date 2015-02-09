@@ -37,13 +37,14 @@ void ofApp::draw(){
     ss << "Options clavier" << endl << endl;
     ss << "N \t\t- Influence du noise" << endl;
     ss << "1 \t\t- Comportement flocking" << endl;
-    ss << "2 \t\t- Comportement lineaire" << endl;
+    ss << "2 \t\t- Comportement noise" << endl;
     ss << "3 \t\t- Comportement attraction" << endl;
+    ss << "4 \t\t- Comportement path" << endl;
     ss << "A Z E R T \t- Types de rendu" << endl;
     ss << "LEFT RIGHT \t- Rotation des particules" << endl;
     ss << "UP DOWN \t- Zoom in out" << endl;
     ss << endl << ofGetFrameRate() << " fps";
-    ofDrawBitmapString(ss.str(), ofPoint( 10, ofGetWindowHeight()-140 ) );
+    ofDrawBitmapString(ss.str(), ofPoint( 10, ofGetWindowHeight()-160 ) );
 
 }
 
