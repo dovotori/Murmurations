@@ -1,4 +1,4 @@
-#version 330 
+#version 330
 layout(lines) in;
 layout(line_strip, max_vertices=2) out;
 
@@ -21,14 +21,16 @@ void main()
     }
     */
 
+    float alpha = 0.5 + (geomZ[0] * 0.5);
+
     gl_Position = gl_in[0].gl_Position;
-    fragColor = vec4(geomColor[0].xyz * geomZ[0], 1.0);
+    fragColor = vec4(geomColor[0].xyz * geomZ[0], alpha);
     EmitVertex();
-    
+
     gl_Position = gl_in[1].gl_Position;
-    fragColor = vec4(geomColor[1].xyz * geomZ[1], 1.0);
+    fragColor = vec4(geomColor[1].xyz * geomZ[1], alpha);
     EmitVertex();
-    
+
     EndPrimitive();
 
-}  
+}

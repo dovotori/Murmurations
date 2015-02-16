@@ -92,6 +92,27 @@ void GpuProcess::resetPosition()
             pos[i*3 + 2] = 0.5; //ofRandom(0.0, 1.0);
         }
     }
+
+
+    /*
+    //// CUBE ////
+    int cote = floor( pow( this->numParticles, (1.0/3.0) ) );
+    cout << cote << endl;
+    int cpt = 0;
+
+    for (int z = 0; z < cote; z++) {
+        for (int y = 0; y < cote; y++) {
+            for (int x = 0; x < cote; x++) {
+
+                pos[cpt*3 + 0] = ofMap(x, 0, cote, 0, 1);
+                pos[cpt*3 + 1] = ofMap(y, 0, cote, 0, 1);
+                pos[cpt*3 + 2] = ofMap(z, 0, cote, 0, 1);
+                cpt++;
+            }
+        }
+    }
+    */
+
     this->posPingPong.src->getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGB);
     this->posPingPong.dst->getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGB);
     delete [] pos;

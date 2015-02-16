@@ -1,4 +1,4 @@
-#version 330 
+#version 330
 layout(points) in;
 layout(triangle_strip, max_vertices=3) out;
 
@@ -13,9 +13,9 @@ void main()
 {
 
 	vec4 pos = gl_in[0].gl_Position;
-    float taille = 0.2 + (geomZ[0] * 4.0);
-    float alpha = 0.2 + (geomZ[0] * 0.8);
-    
+    float taille = 1.0 + (geomZ[0] * 4.0);
+    float alpha = 0.5 + (geomZ[0] * 0.5);
+
     gl_Position = pos;
     fragColor = vec4(geomColor[0].xyz, alpha);
     EmitVertex();

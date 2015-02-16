@@ -1,4 +1,4 @@
-#version 330 
+#version 330
 layout(points) in;
 layout(triangle_strip, max_vertices=6) out;
 
@@ -19,18 +19,18 @@ void main()
 {
 
 	vec4 pos = gl_in[0].gl_Position;
-    float taille = 0.2 + (geomZ[0] * 4.0);
-    float alpha = 0.2 + (geomZ[0] * 0.8);
-    
-    
+    float taille = 1.0 + (geomZ[0] * 4.0);
+    float alpha = 0.5 + (geomZ[0] * 0.5);
+
+
     int i, j;
-    for(j = 0; j < 2; j++) 
+    for(j = 0; j < 2; j++)
     {
-        for(i = 0; i < 3; i++) 
+        for(i = 0; i < 3; i++)
         {
             float r = random( vec2( 1.0 ), length( vec2(pos.x, pos.y) ), vec2(pos.x, pos.y) );
-            r = (r * 2.0) - 1.0; 
-            
+            r = (r * 2.0) - 1.0;
+
             if(i == 1){ pos.x += taille * r; }
             if(i == 2){ pos.y += taille * r; }
 
@@ -40,6 +40,6 @@ void main()
         }
         EndPrimitive();
     }
-    
+
 
 }

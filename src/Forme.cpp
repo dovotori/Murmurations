@@ -5,7 +5,7 @@ Forme::Forme()
     //ctor
     this->noiseInfluence = 0.5;
     this->rotation = 0.0;
-    this->rendu = 3;
+    this->rendu = 0;
     this->mesh.setMode(OF_PRIMITIVE_POINTS); // IMPORTANT doit etre raccord avec le geometry shader
 }
 
