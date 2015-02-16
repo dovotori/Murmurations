@@ -1,0 +1,41 @@
+/mur/comportement (entier de 0 à 3)
+/mur/vitesseMax
+
+/mur/attractionForce
+/mur/attractionSens
+/mur/attractionPosX
+/mur/attractionPosY
+/mur/attractionPosZ
+
+/mur/pathShape (int)
+
+/mur/noiseMagnitude
+
+/mur/flockDistanceSeparation (float entre 0 et 1)
+/mur/flockDistanceAlignement (float entre 0 et 1)
+/mur/flockDistanceCohesion (float entre 0 et 1)
+/mur/flockMagnitudeSeparation (float entre 0 et 1)
+/mur/flockMagnitudeAlignement (float entre 0 et 1)
+/mur/flockMagnitudeCohesion (float entre 0 et 1)
+/mur/flockMasse (float > 1)
+
+/mur/tailleEspaceX (float entre 0 et 1000)
+/mur/tailleEspaceY (float entre 0 et 1000)
+/mur/tailleEspaceZ (float entre 0 et 1000)
+
+/mur/typeRendu (entier)
+/mur/birdColorR (float entre 0 et 1)
+/mur/birdColorV
+/mur/birdColorB
+/mur/birdColorA
+
+/mur/backgroundAlpha (float entre 0 et 1)
+/mur/backgroundImg (entier)
+
+/mur/rotationFormeX
+/mur/rotationFormeY
+/mur/rotationFormeZ
+/mur/zoom (entier)
+/mur/cameraAngle (float > 0.0)
+
+/mur/noiseIntensity
