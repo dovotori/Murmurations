@@ -19,7 +19,20 @@ public:
     void resetPosition();
 
     inline ofTexture& getPosTexture(){ return this->posPingPong.dst->getTextureReference(); };
+    
     inline void setComportement(unsigned int comportement){ this->comportement = comportement; };
+    inline void setMaxSpeed(float value){ this->maxSpeed = value; };
+    
+    inline void setDistanceFlocking(float x, float y, float z){ this->distanceFlocking.set(x, y, z); };
+    inline void setMagnitudeFlocking(float x, float y, float z){ this->magnitudeFlocking.set(x, y, z); };
+    
+    inline void setSensAttraction(float value){ this->sensAttraction = value; };
+    inline void setForceAttraction(float value){ this->forceAttraction = value; };
+    inline void setRayonAttraction(float value){ this->rayonAttraction = value; };
+    inline void setPosAttraction(float x, float y, float z){ this->posAttraction.set(x,y,z); };
+    
+    inline void setMagnitudeNoise(float value){ this->magnitudeNoise = value; };
+
 
 protected:
 private:
@@ -35,10 +48,18 @@ private:
     pingPongBuffer posPingPong;
     pingPongBuffer velPingPong;
 
-    float   vitesseGenerale;
     int     numParticles;
     int     textureRes;
     unsigned int comportement;
+    
+    float vitesseGenerale, maxSpeed;
+    
+    float forceAttraction, rayonAttraction, sensAttraction;
+    ofVec3f posAttraction;
+    
+    ofVec3f distanceFlocking, magnitudeFlocking;
+    
+    float magnitudeNoise;
 
 };
 

@@ -4,12 +4,16 @@ in vec2 fragTexture;
 
 uniform sampler2D prevVelData;   // recive the previus velocity texture
 uniform sampler2D posData;      // recive the position texture
-uniform float timestep;
 uniform int resolution;
+uniform float maxSpeed;
 
 uniform float distanceSeparation;
 uniform float distanceAlignement;
 uniform float distanceCohesion;
+
+uniform float magnitudeSeparation;
+uniform float magnitudeAlignement;
+uniform float magnitudeCohesion;
 
 out vec4 outputColor;
 
@@ -68,7 +72,6 @@ void main(void)
     vec3 pos = texture(posData, st).xyz;      // ... for getting the position data
     vec3 vel = texture(prevVelData, st).xyz;  // and the velocity
 
-    float vitesseMax = 1.0;
     float forceMax = 0.1;
     float masse = 1.0;
 
@@ -136,7 +139,7 @@ void main(void)
     if(length(forceSeparation) > 0)
     {
         forceSeparation = normalize(forceSeparation);
-        forceSeparation *= vitesseMax;
+        forceSeparation *= maxSpeed;
 
         // steer
         forceSeparation -= vel;
@@ -148,7 +151,7 @@ void main(void)
     if(cptAlignement > 0) {
         forceAlignement /= cptAlignement; // divise par le nombre de voisin
         forceAlignement = normalize(forceAlignement);
-        forceAlignement *= vitesseMax;
+        forceAlignement *= maxSpeed;
 
         // steer
         forceAlignement -= vel;
@@ -158,7 +161,7 @@ void main(void)
     // COHESION
     if(cptCohesion > 0) {
         forceCohesion /= cptCohesion;
-        forceCohesion = seekSteering(pos, forceCohesion, vel, vitesseMax, forceMax, masse);
+        forceCohesion = seekSteering(pos, forceCohesion, vel, maxSpeed, forceMax, masse);
     }
 
 
@@ -167,7 +170,9 @@ void main(void)
 
 
     // gerer les influences arbitrairement
-    forceSeparation *= 1.5;
+    forceSeparation *= magnitudeSeparation;
+    forceAlignement *= magnitudeAlignement;
+    forceCohesion *= magnitudeCohesion;
 
     // appliquer la masse
     vec3 forces = forceSeparation;
@@ -177,7 +182,7 @@ void main(void)
 
     // on forme la nouvelle vitesse
     vel += forces;
-    vel = limiter(vel, vitesseMax);
+    vel = limiter(vel, maxSpeed);
 
 
     outputColor = vec4(vel, 1.0);

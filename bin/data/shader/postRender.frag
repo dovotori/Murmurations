@@ -4,6 +4,7 @@ in vec2 fragTexture;
 
 uniform float cpt;
 uniform float noiseInfluence;
+uniform float noiseScale;
 uniform vec2 resolution;
 uniform sampler2D fboTexture;
 
@@ -27,7 +28,7 @@ void main() {
 		if(color.x <= 0.0)
 		{
 			float evolution = 0.5 + (cos(cpt) * 0.5); 
-			alpha = random( vec2( 4.0 ), length( st ), st * evolution ); // noise // scale est cool, fait du moirage en dessous de 1
+			alpha = random( vec2( noiseScale ), length( st ), st * evolution ); // noise // scale est cool, fait du moirage en dessous de 1
 			alpha = (1.0 - noiseInfluence) + (alpha * noiseInfluence); // attenuation du noise
 		} 
 	} else {

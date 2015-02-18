@@ -8,6 +8,7 @@ uniform mat4 view;
 uniform mat4 projection;
 
 uniform sampler2D posTex;
+uniform vec3 couleur;
 uniform vec3 screen;
 uniform float resolution;
 
@@ -31,7 +32,7 @@ void main() {
     vec3 pixPos = texture(posTex, st).xyz;
 
     geomZ = pixPos.z;
-    geomColor = vec4(1.0, 1.0, 1.0, 1.0);
+    geomColor = vec4(couleur, 1.0);
 
     // map la position dans le nouvel espace
     pixPos.x = (pixPos.x * screen.x) - (screen.x / 2.0);

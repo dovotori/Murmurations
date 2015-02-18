@@ -3,6 +3,7 @@
 Background::Background()
 {
     //ctor
+    this->alpha = 1.0;
 }
 
 
@@ -14,7 +15,6 @@ Background::~Background()
 
 void Background::setup()
 {
-    this->alpha = M_PI / 2.0;
     
     this->shader.load("shader/textureFlat");
     
@@ -55,7 +55,6 @@ void Background::update()
 
 void Background::draw()
 {
-    this->alpha += 0.01;
     
     this->shader.begin();
         this->shader.setUniform1f("alpha", this->alpha);

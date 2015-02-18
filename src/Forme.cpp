@@ -4,7 +4,10 @@ Forme::Forme()
 {
     //ctor
     this->noiseInfluence = 0.5;
-    this->rotation = 0.0;
+    this->noiseScale = 4.0;
+    this->rotation.set(0.0, 0.0, 0.0);
+    this->espace.set(40.0, 40.0, 40.0);
+    this->couleur.set(1.0, 0.4, 0.0);
     this->rendu = 0;
     this->mesh.setMode(OF_PRIMITIVE_POINTS); // IMPORTANT doit etre raccord avec le geometry shader
 }
@@ -58,7 +61,9 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
 {
     this->cpt += 0.4;
     this->model.makeIdentityMatrix();
-    this->model.rotate(this->rotation, 1.0, 1.0, 0.0);
+    this->model.rotate(this->rotation.x, 1.0, 0.0, 0.0);
+    this->model.rotate(this->rotation.y, 1.0, 1.0, 0.0);
+    this->model.rotate(this->rotation.z, 1.0, 0.0, 1.0);
 
     this->fbo.begin();
 
@@ -68,7 +73,8 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
 
             this->shader[this->rendu].setUniformTexture("posTex", texPos, 0);
             this->shader[this->rendu].setUniform1f("resolution", (float)this->textureRes);
-            this->shader[this->rendu].setUniform3f("screen", 40.0, 40.0, 40.0); // taille de l'espace 3D des particules
+            this->shader[this->rendu].setUniform3f("couleur", this->couleur.x, this->couleur.y, this->couleur.z);
+            this->shader[this->rendu].setUniform3f("screen", this->espace.x, this->espace.y, this->espace.z); // taille de l'espace 3D des particules
             this->shader[this->rendu].setUniformMatrix4f("model", this->model);
             this->shader[this->rendu].setUniformMatrix4f("view", camera->getViewMatrix());
             this->shader[this->rendu].setUniformMatrix4f("projection", camera->getProjectionMatrix());
@@ -84,6 +90,7 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
     this->postShader.begin();
         this->postShader.setUniform1f("cpt", this->cpt);
         this->postShader.setUniform1f("noiseInfluence", this->noiseInfluence); // de 0 à 1
+        this->postShader.setUniform1f("noiseScale", this->noiseScale);
         this->postShader.setUniformTexture("fboTexture", this->fbo.getTextureReference(0), 0);
         this->postShader.setUniform2f("resolution", ofGetWindowWidth(), ofGetWindowHeight());
         this->fbo.draw(0, 0); // on dessine

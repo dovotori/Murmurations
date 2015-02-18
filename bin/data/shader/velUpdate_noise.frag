@@ -5,6 +5,9 @@ in vec2 fragTexture;
 uniform sampler2D prevVelData;   // vitesse precedente
 uniform sampler2D posData;      // position
 uniform int resolution;
+uniform float maxSpeed;
+
+uniform float noiseMagnitude;
 
 out vec4 outputColor;
 
@@ -37,9 +40,9 @@ void main(void)
     vec3 pos = texture(posData, st).xyz;      // sa position
     vec3 vel = texture(prevVelData, st).xyz;  // sa precedente vitesse
 
-    vec3 noise = noise3(pos);
+    vec3 noise = noise3(pos) * noiseMagnitude;
     vec3 nextVel = vel + noise;
-    nextVel = limiter(nextVel, 1.0);
+    nextVel = limiter(nextVel, maxSpeed );
 
     outputColor = vec4(nextVel, 1.0);
 

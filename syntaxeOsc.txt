@@ -1,8 +1,10 @@
 /max2P5/comportement (entier de 0 à 3)
 /max2P5/vitesseMax
 
+
 /max2P5/attractionForce
 /max2P5/attractionSens
+/max2P5/attractionRayon
 /max2P5/attractionPosX
 /max2P5/attractionPosY
 /max2P5/attractionPosZ

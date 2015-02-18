@@ -5,6 +5,12 @@ in vec2 fragTexture;
 uniform sampler2D prevVelData;   // vitesse precedente
 uniform sampler2D posData;      // position
 uniform int resolution;
+uniform float maxSpeed;
+
+uniform float ramp;
+uniform float radious;
+uniform float strength;
+uniform vec3 positionAttractor;
 
 out vec4 outputColor;
 
@@ -12,11 +18,7 @@ out vec4 outputColor;
 
 vec3 attract(vec3 pos, vec3 vel)
 {
-	float radious = 0.5;
-	float strength = 1.0;
-	float ramp = 1.0;
 
-	vec3 positionAttractor = vec3(0.5, 0.5, 0.5);
 	vec3 dif = positionAttractor - pos;
     float distance = length(dif);
 
@@ -57,7 +59,7 @@ void main(void)
     vec3 vel = texture(prevVelData, st).xyz;  // sa precedente vitesse
 
     vec3 nextVel = attract(pos, vel);
-    nextVel = limiter(nextVel, 1.0);
+    nextVel = limiter(nextVel, maxSpeed);
 
     outputColor = vec4(nextVel, 1.0);
 }

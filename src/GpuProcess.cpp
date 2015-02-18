@@ -7,6 +7,19 @@
 GpuProcess::GpuProcess()
 {
     //ctor
+    this->vitesseGenerale = 0.005;
+    this->maxSpeed = 1.0;
+    this->comportement = 0;
+    
+    this->forceAttraction = 1.0;
+    this->rayonAttraction = 0.5;
+    this->sensAttraction = 1.0;
+    this->posAttraction.set(0.5, 0.5, 0.5);
+    
+    this->distanceFlocking.set(0.2, 0.6, 1.0);
+    this->magnitudeFlocking.set(1.5, 1.0, 1.0);
+    
+    this->magnitudeNoise = 1.0;
 }
 
 GpuProcess::~GpuProcess()
@@ -20,9 +33,7 @@ GpuProcess::~GpuProcess()
 
 void GpuProcess::setup(unsigned int nb)
 {
-    this->vitesseGenerale = 0.005;
     this->numParticles = nb;
-    this->comportement = 0;
 
     this->textureRes = (int)sqrt((float)this->numParticles);      // Definir la resolution de la texture en fonction du nombre de particules
     this->numParticles = this->textureRes * this->textureRes;     // Redefinir le nombre de particules (pas de gachis)
@@ -145,10 +156,26 @@ void GpuProcess::computeGpuVelocity()
             this->updateVel[this->comportement].setUniformTexture("prevVelData", this->velPingPong.src->getTextureReference(), 0);   // passing the previus velocity information
             this->updateVel[this->comportement].setUniformTexture("posData", this->posPingPong.src->getTextureReference(), 1);  // passing the position information
             this->updateVel[this->comportement].setUniform1i("resolution", (int)this->textureRes);
-            this->updateVel[this->comportement].setUniform1f("distanceSeparation", 0.2);
-            this->updateVel[this->comportement].setUniform1f("distanceAlignement", 0.6);
-            this->updateVel[this->comportement].setUniform1f("distanceCohesion", 1.0);
-
+            this->updateVel[this->comportement].setUniform1f("maxSpeed", this->maxSpeed);
+    
+            if(this->comportement == 0) { // flock
+                this->updateVel[this->comportement].setUniform1f("distanceSeparation", this->distanceFlocking.x);
+                this->updateVel[this->comportement].setUniform1f("distanceAlignement", this->distanceFlocking.y);
+                this->updateVel[this->comportement].setUniform1f("distanceCohesion", this->distanceFlocking.z);
+                this->updateVel[this->comportement].setUniform1f("magnitudeSeparation", this->magnitudeFlocking.x);
+                this->updateVel[this->comportement].setUniform1f("magnitudeAlignement", this->magnitudeFlocking.y);
+                this->updateVel[this->comportement].setUniform1f("magnitudeCohesion", this->magnitudeFlocking.z);
+            } else if(this->comportement == 1){ // noise
+            
+            } else if(this->comportement == 2){ // attractor
+                this->updateVel[this->comportement].setUniform1f("ramp", this->sensAttraction);
+                this->updateVel[this->comportement].setUniform1f("length", this->forceAttraction);
+                this->updateVel[this->comportement].setUniform1f("radious", this->rayonAttraction);
+                this->updateVel[this->comportement].setUniform3f("positionAttractor", this->posAttraction.x, this->posAttraction.y, this->posAttraction.z);
+            } else if(this->comportement == 3){ // path
+                this->updateVel[this->comportement].setUniform1f("noiseMagnitude", this->magnitudeNoise);
+            }
+                
             this->velPingPong.src->draw(0, 0); // draw the source velocity texture to be updated
 
         this->updateVel[this->comportement].end();

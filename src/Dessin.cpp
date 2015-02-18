@@ -54,7 +54,7 @@ void Dessin::keyPressed(int key){
 //--------------------------------------------------------------
 void Dessin::keyReleased(int key){
 
-    /*
+    //*
     cout << "key: " << key << endl;
     if(key == 49) { // 1
         cout << "Comportement Flocking actif" << endl;
@@ -95,7 +95,7 @@ void Dessin::keyReleased(int key){
         else if (this->forme.getNoiseInfluence() == 2.0){ this->forme.setNoiseInfluence(0.0); cout << "Noise influence: " << 0.0 << endl; }
 
     }
-    */
+    //*/
 }
 
 //--------------------------------------------------------------

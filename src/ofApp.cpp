@@ -28,8 +28,8 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    ofBackgroundGradient(ofColor(180), ofColor(100));
-    //ofBackground(ofColor(0));
+    //ofBackgroundGradient(ofColor(180), ofColor(100));
+    ofBackground(ofColor(0));
 
     this->dessin.draw(&this->camera);
 

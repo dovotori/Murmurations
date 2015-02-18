@@ -32,8 +32,13 @@ class Forme
             }
         };
         inline void setNoiseInfluence(float value){ this->noiseInfluence = value; };
+        inline void setNoiseScale(float value){ this->noiseScale = value; };
+        inline void setRotation(float x, float y, float z){ this->rotation.set(x, y, z); };
+        inline void setEspace(float x, float y, float z){ this->espace.set(x, y, z); };
+        inline void setCouleur(float x, float y, float z){ this->couleur.set(x, y, z); };
+    
         inline float getNoiseInfluence(){ return this->noiseInfluence; };
-        inline void addRotation(float value){ this->rotation += value; };
+    
     
     protected:
     private:
@@ -47,8 +52,8 @@ class Forme
         unsigned int textureRes;
         unsigned int rendu;
         float cpt;
-        float noiseInfluence;
-        float rotation;
+        float noiseInfluence, noiseScale;
+        ofVec3f rotation, espace, couleur;
 
 };
 

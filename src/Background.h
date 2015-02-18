@@ -15,6 +15,8 @@ public:
     void update();
     void draw();
     
+    inline void setAlpha(float value){ this->alpha = value; };
+    
 protected:
 private:
     ofMesh screen;
