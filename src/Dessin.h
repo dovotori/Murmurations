@@ -7,6 +7,7 @@
 #include "GpuProcess.h"
 #include "Forme.h"
 #include "Background.h"
+#include "Echange.h"
 
 
 
@@ -17,7 +18,7 @@ class Dessin
         Dessin();
         virtual ~Dessin();
         void setup();
-        void update();
+        void update(Camera* camera);
         void draw(Camera* camera);
 
         void keyReleased(int key);
@@ -32,6 +33,7 @@ class Dessin
         GpuProcess process;
         Forme forme;
         Background background;
+        Echange echange;
 
 
 };

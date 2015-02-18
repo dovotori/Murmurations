@@ -22,7 +22,7 @@ void ofApp::setup(){
 //--------------------------------------------------------------
 void ofApp::update(){
 
-    this->dessin.update();
+    this->dessin.update(&this->camera);
 }
 
 //--------------------------------------------------------------
@@ -34,7 +34,7 @@ void ofApp::draw(){
     this->dessin.draw(&this->camera);
 
     stringstream ss;
-    ss << "Options clavier" << endl << endl;
+    /*ss << "Options clavier" << endl << endl;
     ss << "N \t\t- Influence du noise" << endl;
     ss << "1 \t\t- Comportement flocking" << endl;
     ss << "2 \t\t- Comportement noise" << endl;
@@ -43,6 +43,7 @@ void ofApp::draw(){
     ss << "A Z E R T \t- Types de rendu" << endl;
     ss << "LEFT RIGHT \t- Rotation des particules" << endl;
     ss << "UP DOWN \t- Zoom in out" << endl;
+    */
     ss << endl << ofGetFrameRate() << " fps";
     ofDrawBitmapString(ss.str(), ofPoint( 10, ofGetWindowHeight()-160 ) );
 

@@ -4,8 +4,13 @@
 #include "ofMain.h"
 #include "ofxOsc.h"
 
+#include "Camera.h"
+#include "GpuProcess.h"
+#include "Forme.h"
+#include "Background.h"
+
 #define PORT 12000
-#define NB_VAR_MAX 10
+#define NB_VAR_MAX 34
 
 class Echange
 {
@@ -13,11 +18,7 @@ class Echange
         Echange();
         virtual ~Echange();
         void setup();
-        void update();
-        void draw();
-        float* getVar();
-        inline bool getClick(){ return this->click; }
-        inline bool getDraw(int index){ return this->isDraw[index]; }
+        void update(Camera *camera, GpuProcess *process, Forme *forme, Background *background);
 
     protected:
     private:
@@ -25,8 +26,6 @@ class Echange
         float variables[NB_VAR_MAX];
         unsigned int nbVariables;
 
-        bool click;
-        bool isDraw[NB_VAR_MAX];
 };
 
 #endif // ECHANGE_H

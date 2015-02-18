@@ -19,15 +19,17 @@ void Dessin::setup()
     this->process.setup(NB);
     this->forme.setup(NB);
     this->background.setup();
-
+    this->echange.setup();
+    
 }
 
 
-void Dessin::update()
+void Dessin::update(Camera* camera)
 {
 
     this->process.update();
-
+    this->echange.update(camera, &this->process, &this->forme, &this->background);
+    
 }
 
 
@@ -40,18 +42,19 @@ void Dessin::draw(Camera* camera)
 
 //--------------------------------------------------------------
 void Dessin::keyPressed(int key){
-    if(key == 356) { // gauche
+    /*if(key == 356) { // gauche
         cout << "Rotation +" << endl;
         this->forme.addRotation(10.0);
     } else if(key == 358) { // droite
         cout << "Rotation -" << endl;
         this->forme.addRotation(-10.0);
-    }
+    }*/
 }
 
 //--------------------------------------------------------------
 void Dessin::keyReleased(int key){
 
+    /*
     cout << "key: " << key << endl;
     if(key == 49) { // 1
         cout << "Comportement Flocking actif" << endl;
@@ -92,6 +95,7 @@ void Dessin::keyReleased(int key){
         else if (this->forme.getNoiseInfluence() == 2.0){ this->forme.setNoiseInfluence(0.0); cout << "Noise influence: " << 0.0 << endl; }
 
     }
+    */
 }
 
 //--------------------------------------------------------------
