@@ -8,6 +8,6 @@ out vec2 fragTexture;
 void main() {
 
 	fragTexture = texcoord;
-	gl_Position = position;
+	gl_Position = vec4(position.xyz, 1.0);
 }
 

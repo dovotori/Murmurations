@@ -10,7 +10,6 @@
 #include "Background.h"
 
 #define PORT 12000
-#define NB_VAR_MAX 34
 
 class Echange
 {
@@ -23,8 +22,6 @@ class Echange
     protected:
     private:
         ofxOscReceiver receiver;
-        float variables[NB_VAR_MAX];
-        unsigned int nbVariables;
 
 };
 

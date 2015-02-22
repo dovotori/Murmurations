@@ -42,19 +42,19 @@ void Dessin::draw(Camera* camera)
 
 //--------------------------------------------------------------
 void Dessin::keyPressed(int key){
-    /*if(key == 356) { // gauche
+    /*
+     if(key == 356) { // gauche
         cout << "Rotation +" << endl;
-        this->forme.addRotation(10.0);
+        //this->forme.addRotation(10.0);
     } else if(key == 358) { // droite
         cout << "Rotation -" << endl;
-        this->forme.addRotation(-10.0);
+        //this->forme.addRotation(-10.0);
     }*/
 }
 
 //--------------------------------------------------------------
 void Dessin::keyReleased(int key){
-
-    //*
+    /*
     cout << "key: " << key << endl;
     if(key == 49) { // 1
         cout << "Comportement Flocking actif" << endl;

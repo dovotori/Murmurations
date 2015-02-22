@@ -8,8 +8,8 @@ Forme::Forme()
     this->rotation.set(0.0, 0.0, 0.0);
     this->espace.set(40.0, 40.0, 40.0);
     this->couleur.set(1.0, 0.4, 0.0);
-    this->rendu = 0;
-    this->mesh.setMode(OF_PRIMITIVE_POINTS); // IMPORTANT doit etre raccord avec le geometry shader
+    this->rendu = 2;
+    this->mesh.setMode(OF_PRIMITIVE_POINTS); // IMPORTANT doit etre raccord avec le in du geometry shader
 }
 
 Forme::~Forme()
@@ -22,11 +22,11 @@ void Forme::setup(unsigned int nb)
 {
 
     this->shader = new ofShader[5];
-    this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderForme.geom");
+    this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
     this->shader[1].load("shader/render.vert", "shader/render.frag", "shader/renderLigne.geom");
-    this->shader[2].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
+    this->shader[2].load("shader/render.vert", "shader/render.frag", "shader/renderForme.geom");
     this->shader[3].load("shader/render.vert", "shader/render.frag", "shader/renderCrazy.geom");
-    this->shader[4].load("shader/render.vert", "shader/render.frag", "shader/renderImage.geom");
+    this->shader[4].load("shader/render.vert", "shader/renderTexture.frag", "shader/renderImage.geom");
     this->postShader.load("shader/basic.vert", "shader/postRender.frag");
 
     this->textureRes = (int)sqrt((float)nb);      // Definir la resolution de la texture en fonction du nombre de particules
@@ -46,6 +46,9 @@ void Forme::setup(unsigned int nb)
         }
     }
 
+    // TEXTURE DES PARTICULES
+    this->textureParticule.loadImage("image/spark.png");
+    
     this->model.makeIdentityMatrix();
     this->cpt = 0.0;
 
@@ -78,6 +81,10 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
             this->shader[this->rendu].setUniformMatrix4f("model", this->model);
             this->shader[this->rendu].setUniformMatrix4f("view", camera->getViewMatrix());
             this->shader[this->rendu].setUniformMatrix4f("projection", camera->getProjectionMatrix());
+    
+            this->shader[this->rendu].setUniformTexture("particuleTex", this->textureParticule.getTextureReference() , 1);
+            this->shader[this->rendu].setUniform1f("parTexWidth", (float)this->textureParticule.getWidth());
+            this->shader[this->rendu].setUniform1f("parTexHeight", (float)this->textureParticule.getHeight());
 
             this->mesh.draw();
 

@@ -54,7 +54,7 @@ void GpuProcess::setupPosition()
     this->updatePos.load("shader/basic.vert", "shader/posUpdate.frag");// shader for updating the texture that store the particles position on RG channels
 
     // CHARGER DANS UNE FBO TEXTURE
-    this->posPingPong.allocate(this->textureRes, this->textureRes, GL_RGB32F);
+    this->posPingPong.allocate(this->textureRes, this->textureRes, GL_RGBA32F);
     this->resetPosition();
 }
 
@@ -72,16 +72,17 @@ void GpuProcess::setupVelocity()
     this->updateVel[3].load("shader/basic.vert","shader/velUpdate_path.frag");
 
     // COOR
-    float * vel = new float[this->numParticles*3];
+    float * vel = new float[this->numParticles*4];
     for (int i = 0; i < this->numParticles; i++){
-        vel[i*3 + 0] = ofRandom(-1.0, 1.0);
-        vel[i*3 + 1] = ofRandom(-1.0, 1.0);
-        vel[i*3 + 2] = ofRandom(-1.0, 1.0);
+        vel[i*4 + 0] = ofRandom(-1.0, 1.0);
+        vel[i*4 + 1] = ofRandom(-1.0, 1.0);
+        vel[i*4 + 2] = ofRandom(-1.0, 1.0);
+        vel[i*4 + 3] = 1.0;
     }
     //  CHARGER DANS UNE FBO TEXTURE
-    this->velPingPong.allocate(this->textureRes, this->textureRes,GL_RGB32F);
-    this->velPingPong.src->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGB);
-    this->velPingPong.dst->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGB);
+    this->velPingPong.allocate(this->textureRes, this->textureRes,GL_RGBA32F);
+    this->velPingPong.src->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGBA);
+    this->velPingPong.dst->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGBA);
     delete [] vel;
 }
 
@@ -93,14 +94,15 @@ void GpuProcess::setupVelocity()
 void GpuProcess::resetPosition()
 {
     // COOR
-    float * pos = new float[this->numParticles*3];
+    float * pos = new float[this->numParticles*4];
     for (int x = 0; x < this->textureRes; x++){
         for (int y = 0; y < this->textureRes; y++){
             int i = this->textureRes * y + x;
 
-            pos[i*3 + 0] = 0.5; //ofMap(x, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0); // couleur est entre 0 et 1
-            pos[i*3 + 1] = 0.5; //ofMap(y, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0);
-            pos[i*3 + 2] = 0.5; //ofRandom(0.0, 1.0);
+            pos[i*4 + 0] = 0.5; //ofMap(x, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0); // couleur est entre 0 et 1
+            pos[i*4 + 1] = 0.5; //ofMap(y, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0);
+            pos[i*4 + 2] = 0.5; //ofRandom(0.0, 1.0);
+            pos[i*4 + 3] = 1.0;
         }
     }
 
@@ -118,14 +120,15 @@ void GpuProcess::resetPosition()
                 pos[cpt*3 + 0] = ofMap(x, 0, cote, 0, 1);
                 pos[cpt*3 + 1] = ofMap(y, 0, cote, 0, 1);
                 pos[cpt*3 + 2] = ofMap(z, 0, cote, 0, 1);
+                pos[cpt*3 + 3] = 1.0;
                 cpt++;
             }
         }
     }
     */
 
-    this->posPingPong.src->getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGB);
-    this->posPingPong.dst->getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGB);
+    this->posPingPong.src->getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGBA);
+    this->posPingPong.dst->getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGBA);
     delete [] pos;
 }
 

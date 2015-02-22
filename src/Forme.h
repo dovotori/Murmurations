@@ -48,6 +48,8 @@ class Forme
         ofShader postShader;
         ofVboMesh mesh;
         ofFbo fbo;
+        ofImage textureParticule;
+
 
         unsigned int textureRes;
         unsigned int rendu;

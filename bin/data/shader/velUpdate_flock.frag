@@ -184,7 +184,6 @@ void main(void)
     vel += forces;
     vel = limiter(vel, maxSpeed);
 
-
     outputColor = vec4(vel, 1.0);
 
 }

@@ -11,8 +11,7 @@ out vec4 outputColor;
 void main()
 {
 
-	vec2 st = fragTexture;
-	vec4 color = texture(tex, st);
+	vec4 color = texture(tex, fragTexture);
     outputColor = vec4(color.xyz, alpha);
 
 }

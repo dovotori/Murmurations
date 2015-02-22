@@ -3,7 +3,7 @@
 Background::Background()
 {
     //ctor
-    this->alpha = 1.0;
+    this->alpha = 0.0;
 }
 
 

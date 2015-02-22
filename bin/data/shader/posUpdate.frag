@@ -30,6 +30,15 @@ void main(void)
     if(pos.y < 0.0){ pos.y = 1.0; }
     if(pos.z < 0.0){ pos.z = 1.0; }
 
-    outputColor = vec4(pos, 1.0);
+    // angle de direction passé dans l'alpha de la texture 
+    float M_PI = 3.141592653589793238462643383279502884;
+    vec3 dirBase = vec3(0, -1, 0);
+    float angle = dot(dirBase, vel);
+    //float cosAngle = dot / (length(dirBase) * length(vel));
+    //float angleRadian = acos(cosAngle);
+    //float angle = (angleRadian * 180) / M_PI;
+    //var sens = signe( (this.x * v.y) + (this.y * v.x) ); // sens de l'angle
+
+    outputColor = vec4(pos * ( 1.0 / angle ), angle); // w est le facteur de normalisation
 
 }

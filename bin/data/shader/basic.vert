@@ -9,7 +9,7 @@ out vec2 fragTexture;
 void main()
 {
 	fragTexture = texcoord;
-	vec4 npos = position;
+	vec4 npos = vec4(position.xyz, 1.0);
 
 	/* ON REPLACE LA TEXTURE DE 0,1 à -1,1*/
 	npos.x = ( npos.x * 2.0 ) - 1.0;
