@@ -9,6 +9,7 @@ Echange::Echange()
 Echange::~Echange()
 {
     //dtor
+    this->reset.removeListener(this, &Echange::buttonPressed);
 }
 
 
@@ -22,10 +23,11 @@ void Echange::setup()
     this->gui.add(this->rayonPath.setup( "rayonPath", 0.04, 0.01, 0.1 ) );
     this->gui.add(this->vitesseGenerale.setup( "vitesseGenerale", 0.005, 0.001, 0.06 ) );
     this->gui.add(this->flockingForces.setup( "flockingForces", ofVec3f(0.1, 0.5, 0.8), ofVec3f(0.0), ofVec3f(1.0) ) );
+    this->gui.add(this->sensAttraction.setup("sensAttraction", true));
     
     this->gui.add(this->tailleParticule.setup( "tailleParticule", 0.005, 0.005, 0.04 ) );
     this->gui.add(this->rotation.setup( "rotation", ofVec3f(0.0), ofVec3f(0.0), ofVec3f(360.0) ) );
-    this->gui.add(this->color.setup("color", ofColor(100,100,140), ofColor(0,0), ofColor(255,255)));
+    this->gui.add(this->color.setup("color", ofColor(200,200,255,70.0), ofColor(0,0), ofColor(255,255)));
     this->reset.addListener(this, &Echange::buttonPressed);
     
     this->gui.add(this->reset.setup("reset"));
@@ -101,6 +103,7 @@ void Echange::update(Camera *camera, GpuProcess *process, Forme *forme, Backgrou
     process->setRayonPath(this->rayonPath);
     process->setVitesseGenerale(this->vitesseGenerale);
     process->setDistanceFlocking(this->flockingForces->x, this->flockingForces->y, this->flockingForces->z);
+    if(this->sensAttraction){ process->setSensAttraction(1.0); }else{ process->setSensAttraction(-1.0); }
     
     forme->setTaille(this->tailleParticule);
     forme->setRotation(this->rotation->x, this->rotation->y, this->rotation->z);

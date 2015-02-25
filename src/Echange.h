@@ -32,6 +32,7 @@ class Echange
         ofxVec3Slider flockingForces, rotation;
         ofxVec4Slider rapportModes;
         ofxColorSlider color;
+        ofxToggle sensAttraction;
     	ofxButton reset; bool btnPressed;
 };
 
