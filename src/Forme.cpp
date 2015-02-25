@@ -6,9 +6,10 @@ Forme::Forme()
     this->noiseInfluence = 0.5;
     this->noiseScale = 4.0;
     this->rotation.set(0.0, 90.0, 0.0);
-    this->couleur.set(1.0, 1.0, 1.0);
+    this->couleur.set(1.0, 1.0, 1.0, 1.0);
     this->rendu = 2;
     this->cpt = 0.0;
+    this->taille = 0.1;
     this->mesh.setMode(OF_PRIMITIVE_POINTS); // IMPORTANT doit etre raccord avec le in du geometry shader
 }
 
@@ -63,9 +64,9 @@ void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel)
 {
     this->cpt += 0.4;
     this->model.makeIdentityMatrix();
-    //this->model.rotate(this->cpt, 1.0, 0.0, 0.0);
-    //this->model.rotate(this->cpt, 0.0, 1.0, 0.0);
-    //this->model.rotate(this->cpt, 1.0, 0.0, 1.0);
+    this->model.rotate(this->rotation.x, 1.0, 0.0, 0.0);
+    this->model.rotate(this->rotation.y, 0.0, 1.0, 0.0);
+    this->model.rotate(this->rotation.z, 0.0, 0.0, 1.0);
 
     this->fbo.begin();
 
@@ -76,11 +77,12 @@ void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel)
             this->shader[this->rendu].setUniformTexture("posTex", texPos, 0);
             this->shader[this->rendu].setUniformTexture("velTex", texVel, 1);
             this->shader[this->rendu].setUniform1f("resolution", (float)this->textureRes);
-            this->shader[this->rendu].setUniform3f("couleur", this->couleur.x, this->couleur.y, this->couleur.z);
+            this->shader[this->rendu].setUniform4f("couleur", this->couleur.x, this->couleur.y, this->couleur.z, this->couleur.w);
             this->shader[this->rendu].setUniformMatrix4f("model", this->model);
             this->shader[this->rendu].setUniformMatrix4f("view", camera->getViewMatrix());
             this->shader[this->rendu].setUniformMatrix4f("projection", camera->getProjectionMatrix());
             this->shader[this->rendu].setUniformTexture("particuleTex", this->textureParticule.getTextureReference() , 1);
+            this->shader[this->rendu].setUniform1f("tailleParticule", this->taille);
 
             this->mesh.draw();
 

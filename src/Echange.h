@@ -20,14 +20,19 @@ class Echange
         void setup();
         void update(Camera *camera, GpuProcess *process, Forme *forme, Background *background);
         void draw();
+    
+        void buttonPressed();
 
     protected:
     private:
         ofxOscReceiver receiver;
     
         ofxPanel gui;
-        ofxFloatSlider masse, forceMax;
-
+        ofxFloatSlider masse, forceMax, rayonPath, vitesseGenerale, tailleParticule;
+        ofxVec3Slider flockingForces, rotation;
+        ofxVec4Slider rapportModes;
+        ofxColorSlider color;
+    	ofxButton reset; bool btnPressed;
 };
 
 #endif // ECHANGE_H

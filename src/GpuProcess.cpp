@@ -15,11 +15,12 @@ GpuProcess::GpuProcess()
     this->posAttraction.set(0.5, 0.5, 0.5);
     
     this->distanceFlocking.set(0.4, 0.8, 0.9);
-    this->magnitudeFlocking.set(1.0, 1.0, 1.0);
+    this->rapportForces.set(1.0, 0.0, 0.0, 0.0);
     
     this->magnitudeNoise = 1.0;
     this->masse = 4.0;
     this->forceMax = 0.1;
+    this->rayonPath = 0.04;
 }
 
 GpuProcess::~GpuProcess()
@@ -55,7 +56,7 @@ void GpuProcess::setupPosition()
 
     // CHARGER DANS UNE FBO TEXTURE
     this->posPingPong.allocate(this->textureRes, this->textureRes, GL_RGB32F);
-    this->resetPosition();
+    this->resetPosition(1);
 }
 
 
@@ -64,21 +65,10 @@ void GpuProcess::setupPosition()
 
 void GpuProcess::setupVelocity()
 {
-    // SHADER
-    this->updateVel.load("shader/basic.vert","shader/velUpdate.frag");
 
-    // COOR
-    float * vel = new float[this->numParticles*3];
-    for (int i = 0; i < this->numParticles; i++){
-        vel[i*3 + 0] = ofRandom(-1.0, 1.0);
-        vel[i*3 + 1] = ofRandom(-1.0, 1.0);
-        vel[i*3 + 2] = ofRandom(-1.0, 1.0);
-    }
-    //  CHARGER DANS UNE FBO TEXTURE
+    this->updateVel.load("shader/basic.vert","shader/velUpdate.frag");
     this->velPingPong.allocate(this->textureRes, this->textureRes,GL_RGB32F);
-    this->velPingPong.src->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGB);
-    this->velPingPong.dst->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGB);
-    delete [] vel;
+    this->resetVelocity();
 }
 
 
@@ -86,42 +76,43 @@ void GpuProcess::setupVelocity()
 
 /*/////////////// RESET /////////////// */
 
-void GpuProcess::resetPosition()
+void GpuProcess::resetPosition(unsigned int mode)
 {
     
     float * pos = new float[this->numParticles*3];
     
-    /*//
-    /// CENTRE ///
-    for (int x = 0; x < this->textureRes; x++){
-        for (int y = 0; y < this->textureRes; y++){
-            int i = this->textureRes * y + x;
-
-            pos[i*3 + 0] = 0.5; //ofMap(x, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0); // couleur est entre 0 et 1
-            pos[i*3 + 1] = 0.5; //ofMap(y, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0);
-            pos[i*3 + 2] = 0.5; //ofRandom(0.0, 1.0);
-        }
-    }
-    //*/
-
-    //*
-    //// CUBE ////
-    int cote = floor( pow( this->numParticles, (1.0/3.0) ) );
-    cout << cote << endl;
-    int cpt = 0;
-
-    for (int z = 0; z < cote; z++) {
-        for (int y = 0; y < cote; y++) {
-            for (int x = 0; x < cote; x++) {
-
-                pos[cpt*3 + 0] = ofMap(x, 0, cote-1, 0, 1);
-                pos[cpt*3 + 1] = ofMap(y, 0, cote-1, 0, 1);
-                pos[cpt*3 + 2] = ofMap(z, 0, cote-1, 0, 1);
-                cpt++;
+    switch(mode)
+    {
+        case 0: /// CENTRE ///
+            for (int x = 0; x < this->textureRes; x++){
+                 for (int y = 0; y < this->textureRes; y++){
+                 int i = this->textureRes * y + x;
+             
+                 pos[i*3 + 0] = 0.5; //ofMap(x, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0); // couleur est entre 0 et 1
+                 pos[i*3 + 1] = 0.5; //ofMap(y, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0);
+                 pos[i*3 + 2] = 0.5; //ofRandom(0.0, 1.0);
+                }
             }
-        }
+            break;
+            
+            
+        case 1: //// CUBE ////
+            int cote = floor( pow( this->numParticles, (1.0/3.0) ) );
+            int cpt = 0;
+            
+            for (int z = 0; z < cote; z++) {
+                for (int y = 0; y < cote; y++) {
+                    for (int x = 0; x < cote; x++) {
+                        
+                        pos[cpt*3 + 0] = ofMap(x, 0, cote-1, 0, 1);
+                        pos[cpt*3 + 1] = ofMap(y, 0, cote-1, 0, 1);
+                        pos[cpt*3 + 2] = ofMap(z, 0, cote-1, 0, 1);
+                        cpt++;
+                    }
+                }
+            }
+            break;
     }
-    //*/
 
     this->posPingPong.src->getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGB);
     this->posPingPong.dst->getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGB);
@@ -129,6 +120,20 @@ void GpuProcess::resetPosition()
 }
 
 
+
+void GpuProcess::resetVelocity()
+{
+    // COOR
+    float * vel = new float[this->numParticles*3];
+    for (int i = 0; i < this->numParticles; i++){
+        vel[i*3 + 0] = ofRandom(-1.0, 1.0);
+        vel[i*3 + 1] = ofRandom(-1.0, 1.0);
+        vel[i*3 + 2] = ofRandom(-1.0, 1.0);
+    }
+    this->velPingPong.src->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGB);
+    this->velPingPong.dst->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGB);
+    delete [] vel;
+}
 
 
 /*/////////////// UPDATE /////////////// */
@@ -160,19 +165,18 @@ void GpuProcess::computeGpuVelocity()
             this->updateVel.setUniform1f("distanceSeparation", this->distanceFlocking.x);
             this->updateVel.setUniform1f("distanceAlignement", this->distanceFlocking.y);
             this->updateVel.setUniform1f("distanceCohesion", this->distanceFlocking.z);
-            this->updateVel.setUniform1f("magnitudeSeparation", this->magnitudeFlocking.x);
-            this->updateVel.setUniform1f("magnitudeAlignement", this->magnitudeFlocking.y);
-            this->updateVel.setUniform1f("magnitudeCohesion", this->magnitudeFlocking.z);
+            this->updateVel.setUniform4fv("rapportForces", this->rapportForces.getPtr());
     
             this->updateVel.setUniform1f("masse", this->masse);
             this->updateVel.setUniform1f("forceMax", this->forceMax);
+            this->updateVel.setUniform1f("rayonPath", this->rayonPath);
             // noise
             
             // attractor
             this->updateVel.setUniform1f("ramp", this->sensAttraction);
             this->updateVel.setUniform1f("length", this->forceAttraction);
             this->updateVel.setUniform1f("radious", this->rayonAttraction);
-            this->updateVel.setUniform3f("positionAttractor", this->posAttraction.x, this->posAttraction.y, this->posAttraction.z);
+            this->updateVel.setUniform3fv("positionAttractor", this->posAttraction.getPtr());
             // path
             this->updateVel.setUniform1f("noiseMagnitude", this->magnitudeNoise);
                 

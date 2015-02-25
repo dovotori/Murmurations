@@ -16,15 +16,17 @@ public:
     virtual ~GpuProcess();
     void setup(unsigned int nb = 1);
     void update();
-    void resetPosition();
+    void resetPosition(unsigned int mode);
+    void resetVelocity();
 
     inline ofTexture& getPosTexture(){ return this->posPingPong.dst->getTextureReference(); };
     inline ofTexture& getVelTexture(){ return this->velPingPong.dst->getTextureReference(); };
     
     inline void setMaxSpeed(float value){ this->maxSpeed = value; };
+    inline void setVitesseGenerale(float value){ this->vitesseGenerale = value; };
     
     inline void setDistanceFlocking(float x, float y, float z){ this->distanceFlocking.set(x, y, z); };
-    inline void setMagnitudeFlocking(float x, float y, float z){ this->magnitudeFlocking.set(x, y, z); };
+    inline void setRapportForces(float x, float y, float z, float w){ this->rapportForces.set(x, y, z, w); };
     
     inline void setSensAttraction(float value){ this->sensAttraction = value; };
     inline void setForceAttraction(float value){ this->forceAttraction = value; };
@@ -34,6 +36,7 @@ public:
     inline void setMagnitudeNoise(float value){ this->magnitudeNoise = value; };
     inline void setMasse(float value){ this->masse = value; };
     inline void setForceMax(float value){ this->forceMax = value; };
+    inline void setRayonPath(float value){ this->rayonPath = value; };
 
 
 protected:
@@ -58,9 +61,10 @@ private:
     float forceAttraction, rayonAttraction, sensAttraction;
     ofVec3f posAttraction;
     
-    ofVec3f distanceFlocking, magnitudeFlocking;
+    ofVec3f distanceFlocking;
+    ofVec4f rapportForces;
     
-    float magnitudeNoise, masse, forceMax;
+    float magnitudeNoise, masse, forceMax, rayonPath;
 
 };
 

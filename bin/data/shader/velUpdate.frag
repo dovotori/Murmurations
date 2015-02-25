@@ -5,6 +5,7 @@ in vec2 fragTexture;
 uniform sampler2D prevVelData;   // recive the previus velocity texture
 uniform sampler2D posData;      // recive the position texture
 uniform int resolution;
+uniform vec4 rapportForces;
 
 out vec4 outputColor;
 
@@ -67,10 +68,6 @@ uniform float forceMax;
 uniform float distanceSeparation;
 uniform float distanceAlignement;
 uniform float distanceCohesion;
-
-uniform float magnitudeSeparation;
-uniform float magnitudeAlignement;
-uniform float magnitudeCohesion;
 
 
 
@@ -169,12 +166,6 @@ vec3 flocking(vec3 pos, vec3 vel) {
 
     /////////////////////// ON APPLIQUE ///////////////////////
 
-
-    // gerer les influences arbitrairement
-    forceSeparation *= magnitudeSeparation;
-    forceAlignement *= magnitudeAlignement;
-    forceCohesion *= magnitudeCohesion;
-
     // appliquer la masse
     vec3 forces = forceSeparation;
     forces += forceAlignement;
@@ -191,18 +182,6 @@ vec3 flocking(vec3 pos, vec3 vel) {
 
 
 
-/*////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////// NOISE //////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////*/
-
-uniform float noiseMagnitude;
-
-vec3 noiseProcess(vec3 pos, vec3 vel){
-    vec3 noise = noise3(pos) * noiseMagnitude;
-    vec3 nextVel = vel + noise;
-    nextVel = limiter(nextVel, 1.0);
-    return nextVel;
-}
 
 
 
@@ -241,7 +220,7 @@ vec3 attract(vec3 pos, vec3 vel)
 ///////////////////////////////////////////// PATH ///////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////*/
 
-
+uniform float rayonPath;
 
 
 vec3 getPathTarget(vec3 predictionPos, vec3 origine, vec3 destination)
@@ -264,10 +243,10 @@ vec3 followPath(vec3 pos, vec3 vel)
     vec3 predictionPos = pos; 
 
     vec3 pointsPath[4];
-    pointsPath[0] = vec3(0.2, 0.5, 0.5);
-    pointsPath[1] = vec3(0.4, 0.2, 0.5);
-    pointsPath[2] = vec3(0.6, 0.8, 0.5);
-    pointsPath[3] = vec3(0.8, 0.5, 0.5);
+    pointsPath[0] = vec3(0.3, 0.5, 0.5);
+    pointsPath[1] = vec3(0.4, 0.3, 0.5);
+    pointsPath[2] = vec3(0.6, 0.7, 0.5);
+    pointsPath[3] = vec3(0.7, 0.5, 0.5);
 
     float distancePlusProche = 100000.0;
     vec3 destination = vec3(0.0);
@@ -305,7 +284,7 @@ vec3 followPath(vec3 pos, vec3 vel)
         }
     }
 
-    if (distancePlusProche > 0.04) {
+    if (distancePlusProche > rayonPath) {
       return seekSteering(pos, destination, vel, 1.0, forceMax, masse);
     } 
     else {
@@ -313,6 +292,20 @@ vec3 followPath(vec3 pos, vec3 vel)
     }
 }
 
+
+
+/*////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////// NOISE //////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+uniform float noiseMagnitude;
+
+vec3 noiseProcess(vec3 pos, vec3 vel){
+    vec3 noise = noise3(pos) * noiseMagnitude;
+    vec3 nextVel = vel + noise;
+    nextVel = limiter(nextVel, 1.0);
+    return nextVel;
+}
 
 
 
@@ -328,10 +321,10 @@ void main(void)
     vec3 pos = texture(posData, st).xyz;      // ... for getting the position data
     vec3 vel = texture(prevVelData, st).xyz;  // and the velocity
 
-    //vec3 nextVel = flocking(pos, vel);
-    //vec3 nextVel = noiseProcess(pos, vel);
-    //vec3 nextVel = attract(pos, vel);
-    vec3 nextVel = followPath(pos, vel);
+    vec3 nextVel = flocking(pos, vel) * rapportForces.x;
+    nextVel += attract(pos, vel) * rapportForces.y;
+    nextVel += followPath(pos, vel) * rapportForces.z;
+    //nextVel += noiseProcess(pos, vel) * rapportForces.w;
 
     outputColor = vec4(nextVel, 1.0);
 

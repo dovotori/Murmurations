@@ -34,7 +34,8 @@ class Forme
         inline void setNoiseInfluence(float value){ this->noiseInfluence = value; };
         inline void setNoiseScale(float value){ this->noiseScale = value; };
         inline void setRotation(float x, float y, float z){ this->rotation.set(x, y, z); };
-        inline void setCouleur(float x, float y, float z){ this->couleur.set(x, y, z); };
+        inline void setCouleur(float x, float y, float z, float a){ this->couleur.set(x, y, z, a); };
+        inline void setTaille(float valeur){ this->taille = valeur; };
     
         inline float getNoiseInfluence(){ return this->noiseInfluence; };
     
@@ -52,9 +53,9 @@ class Forme
 
         unsigned int textureRes;
         unsigned int rendu;
-        float cpt;
-        float noiseInfluence, noiseScale;
-        ofVec3f rotation, couleur;
+        float cpt, noiseInfluence, noiseScale, taille;
+        ofVec3f rotation;
+        ofVec4f couleur;
 
 };
 
