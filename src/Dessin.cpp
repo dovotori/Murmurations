@@ -36,7 +36,8 @@ void Dessin::update(Camera* camera)
 void Dessin::draw(Camera* camera)
 {
     this->background.draw();
-    this->forme.draw(camera, this->process.getPosTexture());
+    this->forme.draw(camera, this->process.getPosTexture(), this->process.getVelTexture());
+    this->echange.draw();
 }
 
 

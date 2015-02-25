@@ -3,6 +3,7 @@
 
 #include "ofMain.h"
 #include "ofxOsc.h"
+#include "ofxGui.h"
 
 #include "Camera.h"
 #include "GpuProcess.h"
@@ -18,10 +19,14 @@ class Echange
         virtual ~Echange();
         void setup();
         void update(Camera *camera, GpuProcess *process, Forme *forme, Background *background);
+        void draw();
 
     protected:
     private:
         ofxOscReceiver receiver;
+    
+        ofxPanel gui;
+        ofxFloatSlider masse, forceMax;
 
 };
 

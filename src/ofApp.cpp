@@ -12,8 +12,8 @@ void ofApp::setup(){
     //ofSetBackgroundAuto(false); // empeche le rafraichissement des buffer automatique (dissine en superposant)
 
     this->camera.setup();
-    this->camera.setPosition(0, 0, 100);
-    this->camera.setNearFar(1.0, 200.0);
+    this->camera.setPosition(0.0, 0.0, 2.0);
+    this->camera.setNearFar(1.0, 400.0);
 
     this->dessin.setup();
 

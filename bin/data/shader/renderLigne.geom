@@ -3,7 +3,9 @@ layout(lines) in;
 layout(line_strip, max_vertices=2) out;
 
 in vec4 geomColor[];
-in float geomZ[];
+
+uniform mat4 view;
+uniform mat4 projection;
 
 out vec4 fragColor;
 
@@ -21,13 +23,13 @@ void main()
     }
     */
 
-    float alpha = 0.5 + (geomZ[0] * 0.5);
+    float alpha = 0.5 + (gl_in[0].gl_Position.z * 0.5);
 
-    gl_Position = gl_in[0].gl_Position;
+    gl_Position = projection * view * gl_in[0].gl_Position;
     fragColor = vec4(geomColor[0].xyz * geomZ[0], alpha);
     EmitVertex();
 
-    gl_Position = gl_in[1].gl_Position;
+    gl_Position = projection * view * gl_in[1].gl_Position;
     fragColor = vec4(geomColor[1].xyz * geomZ[1], alpha);
     EmitVertex();
 

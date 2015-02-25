@@ -14,6 +14,9 @@ Echange::~Echange()
 void Echange::setup()
 {
     this->receiver.setup(PORT);
+    this->gui.setup();
+    this->gui.add(this->masse.setup( "masse", 2.0, 0.1, 10.0 ) );
+    this->gui.add(this->forceMax.setup( "forceMax", 0.1, 0.001, 0.2 ) );
 }
 
 
@@ -30,7 +33,6 @@ void Echange::update(Camera *camera, GpuProcess *process, Forme *forme, Backgrou
         string argumentAdresse = m.getAddress();
         
         /*//// PROCESS /////*/
-        if(argumentAdresse == "/max2P5/comportement"){ cout << m.getArgAsFloat(0) << endl; process->setComportement(0); }
         if(argumentAdresse == "/max2P5/vitesseMax"){ cout << m.getArgAsFloat(0) << endl; process->setMaxSpeed(1.0);}
         
         /*//// ATTRACTION /////*/
@@ -58,7 +60,6 @@ void Echange::update(Camera *camera, GpuProcess *process, Forme *forme, Backgrou
         if(argumentAdresse == "/max2P5/flockMasse"){ cout << m.getArgAsFloat(0) << endl; } //(float > 1)
         
         /*//// FORME /////*/
-        if(argumentAdresse == "/max2P5/tailleEspaceX"){ cout << m.getArgAsFloat(0) << endl; forme->setEspace(40.0, 40.0, 40.0); } //(float entre 0 et 1000)
         if(argumentAdresse == "/max2P5/tailleEspaceY"){ cout << m.getArgAsFloat(0) << endl; } //(float entre 0 et 1000)
         if(argumentAdresse == "/max2P5/tailleEspaceZ"){ cout << m.getArgAsFloat(0) << endl; } //(float entre 0 et 1000)
         
@@ -83,16 +84,18 @@ void Echange::update(Camera *camera, GpuProcess *process, Forme *forme, Backgrou
         
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
+    // G/U/I //
+    /*//// PATH /////*/
+
+    process->setMasse(this->masse);
+    process->setForceMax(this->forceMax);
 }
 
+
+void Echange::draw()
+{
+    this->gui.draw();
+}
 
 
 

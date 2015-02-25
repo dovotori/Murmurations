@@ -11,9 +11,8 @@ uniform sampler2D fboTexture;
 out vec4 outputColor;
 
 
-float random(vec2 scale, float seed, vec2 variations) {
-	return fract( sin( dot( variations + seed, scale ) ) * 43758.5453 + seed );
-}
+float random(vec2 scale, float seed, vec2 variations) 
+{ return fract( sin( dot( variations + seed, scale ) ) * 43758.5453 + seed ); }
 
 
 void main() {
@@ -38,6 +37,5 @@ void main() {
 	
 
     outputColor = vec4(color.xyz, alpha);
-    //outputColor = vec4(vec3(n), 1.0);
 
 }

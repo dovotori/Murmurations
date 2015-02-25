@@ -18,7 +18,7 @@ class Forme
         Forme();
         virtual ~Forme();
         void setup(unsigned int nb = 1);
-        void draw(Camera *camera, ofTexture& texPos);
+        void draw(Camera *camera, ofTexture& texPos, ofTexture& texVel);
     
         inline void setRendu(unsigned int rendu) {
             this->rendu = rendu;
@@ -34,7 +34,6 @@ class Forme
         inline void setNoiseInfluence(float value){ this->noiseInfluence = value; };
         inline void setNoiseScale(float value){ this->noiseScale = value; };
         inline void setRotation(float x, float y, float z){ this->rotation.set(x, y, z); };
-        inline void setEspace(float x, float y, float z){ this->espace.set(x, y, z); };
         inline void setCouleur(float x, float y, float z){ this->couleur.set(x, y, z); };
     
         inline float getNoiseInfluence(){ return this->noiseInfluence; };
@@ -55,7 +54,7 @@ class Forme
         unsigned int rendu;
         float cpt;
         float noiseInfluence, noiseScale;
-        ofVec3f rotation, espace, couleur;
+        ofVec3f rotation, couleur;
 
 };
 

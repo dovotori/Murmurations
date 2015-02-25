@@ -31,6 +31,7 @@ class Camera
         ofMatrix4x4 view, projection, identity;
         ofVec3f position, target;
         float angle, near, far;
+    
 
 };
 

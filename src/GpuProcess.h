@@ -19,8 +19,8 @@ public:
     void resetPosition();
 
     inline ofTexture& getPosTexture(){ return this->posPingPong.dst->getTextureReference(); };
+    inline ofTexture& getVelTexture(){ return this->velPingPong.dst->getTextureReference(); };
     
-    inline void setComportement(unsigned int comportement){ this->comportement = comportement; };
     inline void setMaxSpeed(float value){ this->maxSpeed = value; };
     
     inline void setDistanceFlocking(float x, float y, float z){ this->distanceFlocking.set(x, y, z); };
@@ -32,6 +32,8 @@ public:
     inline void setPosAttraction(float x, float y, float z){ this->posAttraction.set(x,y,z); };
     
     inline void setMagnitudeNoise(float value){ this->magnitudeNoise = value; };
+    inline void setMasse(float value){ this->masse = value; };
+    inline void setForceMax(float value){ this->forceMax = value; };
 
 
 protected:
@@ -43,14 +45,13 @@ private:
     void computeGpuVelocity();
 
     ofShader updatePos;
-    ofShader* updateVel;
+    ofShader updateVel;
 
     pingPongBuffer posPingPong;
     pingPongBuffer velPingPong;
 
     int     numParticles;
     int     textureRes;
-    unsigned int comportement;
     
     float vitesseGenerale, maxSpeed;
     
@@ -59,7 +60,7 @@ private:
     
     ofVec3f distanceFlocking, magnitudeFlocking;
     
-    float magnitudeNoise;
+    float magnitudeNoise, masse, forceMax;
 
 };
 

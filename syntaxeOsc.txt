@@ -1,43 +1,27 @@
-/max2P5/comportement (entier de 0 à 3)
 /max2P5/vitesseMax
-
 
 /max2P5/attractionForce
 /max2P5/attractionSens
 /max2P5/attractionRayon
-/max2P5/attractionPosX
-/max2P5/attractionPosY
-/max2P5/attractionPosZ
+/max2P5/attractionPosition XYZ
 
 /max2P5/pathShape (int)
 
 /max2P5/noiseMagnitude
 
-/max2P5/flockDistanceSeparation (float entre 0 et 1)
-/max2P5/flockDistanceAlignement (float entre 0 et 1)
-/max2P5/flockDistanceCohesion (float entre 0 et 1)
-/max2P5/flockMagnitudeSeparation (float entre 0 et 1)
-/max2P5/flockMagnitudeAlignement (float entre 0 et 1)
-/max2P5/flockMagnitudeCohesion (float entre 0 et 1)
-/max2P5/flockMasse (float > 1)
+/max2P5/flockForces XYZ
+/max2P5/flockAmplitudes XYZ
+/max2P5/flockMasse 
 
-/max2P5/tailleEspaceX (float entre 0 et 1000)
-/max2P5/tailleEspaceY (float entre 0 et 1000)
-/max2P5/tailleEspaceZ (float entre 0 et 1000)
 
-/max2P5/typeRendu (entier)
-/max2P5/birdColorR (float entre 0 et 1)
-/max2P5/birdColorV
-/max2P5/birdColorB
-/max2P5/birdColorA
+/max2P5/typeRendu (int)
+/max2P5/birdColor RVBA
 
 /max2P5/backgroundAlpha (float entre 0 et 1)
 /max2P5/backgroundImg (entier)
 
-/max2P5/rotationFormeX
-/max2P5/rotationFormeY
-/max2P5/rotationFormeZ
-/max2P5/zoom (entier)
+/max2P5/rotationForme XYZ
+/max2P5/zoom
 /max2P5/cameraAngle (float > 0.0)
 
 /max2P5/noiseIntensity

@@ -5,10 +5,10 @@ Forme::Forme()
     //ctor
     this->noiseInfluence = 0.5;
     this->noiseScale = 4.0;
-    this->rotation.set(0.0, 0.0, 0.0);
-    this->espace.set(40.0, 40.0, 40.0);
-    this->couleur.set(1.0, 0.4, 0.0);
+    this->rotation.set(0.0, 90.0, 0.0);
+    this->couleur.set(1.0, 1.0, 1.0);
     this->rendu = 2;
+    this->cpt = 0.0;
     this->mesh.setMode(OF_PRIMITIVE_POINTS); // IMPORTANT doit etre raccord avec le in du geometry shader
 }
 
@@ -22,11 +22,11 @@ void Forme::setup(unsigned int nb)
 {
 
     this->shader = new ofShader[5];
-    this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
-    this->shader[1].load("shader/render.vert", "shader/render.frag", "shader/renderLigne.geom");
+    //this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
+    //this->shader[1].load("shader/render.vert", "shader/render.frag", "shader/renderLigne.geom");
     this->shader[2].load("shader/render.vert", "shader/render.frag", "shader/renderForme.geom");
-    this->shader[3].load("shader/render.vert", "shader/render.frag", "shader/renderCrazy.geom");
-    this->shader[4].load("shader/render.vert", "shader/renderTexture.frag", "shader/renderImage.geom");
+    //this->shader[3].load("shader/render.vert", "shader/render.frag", "shader/renderCrazy.geom");
+    //this->shader[4].load("shader/render.vert", "shader/renderTexture.frag", "shader/renderImage.geom");
     this->postShader.load("shader/basic.vert", "shader/postRender.frag");
 
     this->textureRes = (int)sqrt((float)nb);      // Definir la resolution de la texture en fonction du nombre de particules
@@ -50,7 +50,6 @@ void Forme::setup(unsigned int nb)
     this->textureParticule.loadImage("image/spark.png");
     
     this->model.makeIdentityMatrix();
-    this->cpt = 0.0;
 
 }
 
@@ -60,13 +59,13 @@ void Forme::setup(unsigned int nb)
 
 
 
-void Forme::draw(Camera *camera, ofTexture& texPos)
+void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel)
 {
     this->cpt += 0.4;
     this->model.makeIdentityMatrix();
-    this->model.rotate(this->rotation.x, 1.0, 0.0, 0.0);
-    this->model.rotate(this->rotation.y, 1.0, 1.0, 0.0);
-    this->model.rotate(this->rotation.z, 1.0, 0.0, 1.0);
+    //this->model.rotate(this->cpt, 1.0, 0.0, 0.0);
+    //this->model.rotate(this->cpt, 0.0, 1.0, 0.0);
+    //this->model.rotate(this->cpt, 1.0, 0.0, 1.0);
 
     this->fbo.begin();
 
@@ -75,16 +74,13 @@ void Forme::draw(Camera *camera, ofTexture& texPos)
         this->shader[this->rendu].begin();
 
             this->shader[this->rendu].setUniformTexture("posTex", texPos, 0);
+            this->shader[this->rendu].setUniformTexture("velTex", texVel, 1);
             this->shader[this->rendu].setUniform1f("resolution", (float)this->textureRes);
             this->shader[this->rendu].setUniform3f("couleur", this->couleur.x, this->couleur.y, this->couleur.z);
-            this->shader[this->rendu].setUniform3f("screen", this->espace.x, this->espace.y, this->espace.z); // taille de l'espace 3D des particules
             this->shader[this->rendu].setUniformMatrix4f("model", this->model);
             this->shader[this->rendu].setUniformMatrix4f("view", camera->getViewMatrix());
             this->shader[this->rendu].setUniformMatrix4f("projection", camera->getProjectionMatrix());
-    
             this->shader[this->rendu].setUniformTexture("particuleTex", this->textureParticule.getTextureReference() , 1);
-            this->shader[this->rendu].setUniform1f("parTexWidth", (float)this->textureParticule.getWidth());
-            this->shader[this->rendu].setUniform1f("parTexHeight", (float)this->textureParticule.getHeight());
 
             this->mesh.draw();
 
