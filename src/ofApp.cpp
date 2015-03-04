@@ -12,7 +12,7 @@ void ofApp::setup(){
     //ofSetBackgroundAuto(false); // empeche le rafraichissement des buffer automatique (dissine en superposant)
 
     this->camera.setup();
-    this->camera.setPosition(0.0, 0.0, 2.0);
+    this->camera.setPosition(0.0, 0.0, 4.0);
     this->camera.setNearFar(1.0, 400.0);
 
     this->dessin.setup();
@@ -42,15 +42,6 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
     this->dessin.keyPressed(key);
-    if(key == 357) { // haut
-        cout << "Camera forward" << endl;
-        ofVec3f cPos = this->camera.getPosition();
-        if(cPos.z > 50.0){ this->camera.setPosition(cPos.x, cPos.y, cPos.z-2.0); }
-    } else if(key == 359) { // bas
-        cout << "Camera backward" << endl;
-        ofVec3f cPos = this->camera.getPosition();
-        if(cPos.z < 1000.0){ this->camera.setPosition(cPos.x, cPos.y, cPos.z+2.0); }
-    }
 }
 
 //--------------------------------------------------------------

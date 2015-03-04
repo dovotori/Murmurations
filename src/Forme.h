@@ -5,12 +5,6 @@
 #include "Camera.h"
 
 
-/*
- RENDU
- 0 FORME A PARTIR D'UN POINT
- 1 LIGNES
- 2 POINTS
- */
 
 class Forme
 {
@@ -18,7 +12,7 @@ class Forme
         Forme();
         virtual ~Forme();
         void setup(unsigned int nb = 1);
-        void draw(Camera *camera, ofTexture& texPos, ofTexture& texVel);
+        void draw(Camera *camera, ofTexture& texPos, ofTexture& texVel, ofTexture& formTex);
     
         inline void setRendu(unsigned int rendu) {
             this->rendu = rendu;

@@ -18,6 +18,7 @@ public:
     void update();
     void resetPosition(unsigned int mode);
     void resetVelocity();
+    inline void drawDebugTexture(){ this->velPingPong.dst->draw(0, 0); };
 
     inline ofTexture& getPosTexture(){ return this->posPingPong.dst->getTextureReference(); };
     inline ofTexture& getVelTexture(){ return this->velPingPong.dst->getTextureReference(); };

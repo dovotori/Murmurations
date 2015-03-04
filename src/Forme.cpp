@@ -28,7 +28,7 @@ void Forme::setup(unsigned int nb)
     this->shader[2].load("shader/render.vert", "shader/render.frag", "shader/renderForme.geom");
     //this->shader[3].load("shader/render.vert", "shader/render.frag", "shader/renderCrazy.geom");
     //this->shader[4].load("shader/render.vert", "shader/renderTexture.frag", "shader/renderImage.geom");
-    this->postShader.load("shader/basic.vert", "shader/postRender.frag");
+    this->postShader.load("shader/texFbo.vert", "shader/postRender.frag");
 
     this->textureRes = (int)sqrt((float)nb);      // Definir la resolution de la texture en fonction du nombre de particules
 
@@ -60,7 +60,7 @@ void Forme::setup(unsigned int nb)
 
 
 
-void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel)
+void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel, ofTexture& formTex)
 {
     this->cpt += 0.4;
     this->model.makeIdentityMatrix();
@@ -76,6 +76,7 @@ void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel)
 
             this->shader[this->rendu].setUniformTexture("posTex", texPos, 0);
             this->shader[this->rendu].setUniformTexture("velTex", texVel, 1);
+            this->shader[this->rendu].setUniformTexture("formTex", formTex, 2);
             this->shader[this->rendu].setUniform1f("resolution", (float)this->textureRes);
             this->shader[this->rendu].setUniform4f("couleur", this->couleur.x, this->couleur.y, this->couleur.z, this->couleur.w);
             this->shader[this->rendu].setUniformMatrix4f("model", this->model);

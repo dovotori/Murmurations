@@ -6,10 +6,11 @@
 #include "Camera.h"
 #include "GpuProcess.h"
 #include "Forme.h"
+#include "Sphere.h"
 #include "Background.h"
 #include "Echange.h"
 
-
+#define NB 100
 
 
 class Dessin
@@ -32,6 +33,7 @@ class Dessin
 
         GpuProcess process;
         Forme forme;
+        Sphere sphere;
         Background background;
         Echange echange;
 

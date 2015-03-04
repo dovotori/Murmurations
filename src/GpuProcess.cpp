@@ -52,7 +52,7 @@ void GpuProcess::setup(unsigned int nb)
 void GpuProcess::setupPosition()
 {
     // SHADER
-    this->updatePos.load("shader/basic.vert", "shader/posUpdate.frag");// shader for updating the texture that store the particles position on RG channels
+    this->updatePos.load("shader/texFbo.vert", "shader/posUpdate.frag");// shader for updating the texture that store the particles position on RG channels
 
     // CHARGER DANS UNE FBO TEXTURE
     this->posPingPong.allocate(this->textureRes, this->textureRes, GL_RGB32F);
@@ -66,7 +66,7 @@ void GpuProcess::setupPosition()
 void GpuProcess::setupVelocity()
 {
 
-    this->updateVel.load("shader/basic.vert","shader/velUpdate.frag");
+    this->updateVel.load("shader/texFbo.vert","shader/velUpdate.frag");
     this->velPingPong.allocate(this->textureRes, this->textureRes,GL_RGB32F);
     this->resetVelocity();
 }
@@ -144,7 +144,6 @@ void GpuProcess::update()
 
     this->computeGpuVelocity();
     this->computeGpuPosition();
-
 }
 
 
