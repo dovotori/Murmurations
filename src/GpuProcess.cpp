@@ -56,7 +56,7 @@ void GpuProcess::setupPosition()
 
     // CHARGER DANS UNE FBO TEXTURE
     this->posPingPong.allocate(this->textureRes, this->textureRes, GL_RGB32F);
-    this->resetPosition(1);
+    this->resetPosition(0);
 }
 
 

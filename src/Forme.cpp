@@ -7,9 +7,9 @@ Forme::Forme()
     this->noiseScale = 4.0;
     this->rotation.set(0.0, 90.0, 0.0);
     this->couleur.set(1.0, 1.0, 1.0, 1.0);
-    this->rendu = 2;
+    this->rendu = 1;
     this->cpt = 0.0;
-    this->taille = 0.1;
+    this->taille = 0.4;
     this->mesh.setMode(OF_PRIMITIVE_POINTS); // IMPORTANT doit etre raccord avec le in du geometry shader
 }
 
@@ -23,11 +23,11 @@ void Forme::setup(unsigned int nb)
 {
 
     this->shader = new ofShader[5];
-    //this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
-    //this->shader[1].load("shader/render.vert", "shader/render.frag", "shader/renderLigne.geom");
+    this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
+    this->shader[1].load("shader/render.vert", "shader/render.frag", "shader/renderCarre.geom");
     this->shader[2].load("shader/render.vert", "shader/render.frag", "shader/renderForme.geom");
-    //this->shader[3].load("shader/render.vert", "shader/render.frag", "shader/renderCrazy.geom");
-    //this->shader[4].load("shader/render.vert", "shader/renderTexture.frag", "shader/renderImage.geom");
+    this->shader[3].load("shader/render.vert", "shader/renderTexture.frag", "shader/renderImage.geom");
+    //this->shader[4].load("shader/render.vert", "shader/render.frag", "shader/renderCrazy.geom");
     this->postShader.load("shader/texFbo.vert", "shader/postRender.frag");
 
     this->textureRes = (int)sqrt((float)nb);      // Definir la resolution de la texture en fonction du nombre de particules
@@ -49,7 +49,7 @@ void Forme::setup(unsigned int nb)
 
     // TEXTURE DES PARTICULES
     this->textureParticule.loadImage("image/spark.png");
-    
+
     this->model.makeIdentityMatrix();
 
 }
@@ -60,7 +60,7 @@ void Forme::setup(unsigned int nb)
 
 
 
-void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel, ofTexture& formTex)
+void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel)
 {
     this->cpt += 0.4;
     this->model.makeIdentityMatrix();
@@ -76,7 +76,6 @@ void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel, ofTexture
 
             this->shader[this->rendu].setUniformTexture("posTex", texPos, 0);
             this->shader[this->rendu].setUniformTexture("velTex", texVel, 1);
-            this->shader[this->rendu].setUniformTexture("formTex", formTex, 2);
             this->shader[this->rendu].setUniform1f("resolution", (float)this->textureRes);
             this->shader[this->rendu].setUniform4f("couleur", this->couleur.x, this->couleur.y, this->couleur.z, this->couleur.w);
             this->shader[this->rendu].setUniformMatrix4f("model", this->model);
@@ -101,6 +100,8 @@ void Forme::draw(Camera *camera, ofTexture& texPos, ofTexture& texVel, ofTexture
         this->postShader.setUniform2f("resolution", ofGetWindowWidth(), ofGetWindowHeight());
         this->fbo.draw(0, 0); // on dessine
     this->postShader.end();
+
+
 }
 
 

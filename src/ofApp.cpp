@@ -13,7 +13,7 @@ void ofApp::setup(){
 
     this->camera.setup();
     this->camera.setPosition(0.0, 0.0, 4.0);
-    this->camera.setNearFar(1.0, 400.0);
+    this->camera.setNearFar(0.1, 10.0);
 
     this->dessin.setup();
 
@@ -34,7 +34,7 @@ void ofApp::draw(){
     this->dessin.draw(&this->camera);
 
     stringstream ss;
-    ss << endl << ofGetFrameRate() << " fps";
+    ss << endl << "[h] GUI native ou OSC // " << ofGetFrameRate() << " fps";
     ofDrawBitmapString(ss.str(), ofPoint( 10, ofGetWindowHeight()-20 ) );
 
 }

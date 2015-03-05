@@ -1,11 +1,12 @@
 #version 330
 layout(points) in;
-layout(triangle_strip, max_vertices=6) out;
+layout(triangle_strip, max_vertices=4) out;
 
-in vec4 geomColor[];
-
+uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform vec4 couleur;
+uniform float tailleParticule;
 
 out vec4 fragColor;
 
@@ -15,44 +16,39 @@ void main()
 {
 
 	vec4 pos = gl_in[0].gl_Position;
+
+    pos.x -= 0.5; // -0.5 pour centrer  
+    pos.y -= 0.5;
+    pos.z -= 0.5;
+
     float profondeur = pos.z;
-    float taille = 1.0 + (profondeur * 4.0);
+    float taille = (0.4 + (profondeur * 0.6)) * tailleParticule;
     float alpha = 0.5 + (profondeur * 0.5);
 
+    mat4 camera = projection * view * model;
+
     // 1EME TRIANGLE
-    gl_Position = projection * view * pos;
-    fragColor = vec4(geomColor[0].xyz, alpha);
+    gl_Position = camera * pos;
+    fragColor = vec4(couleur.xyz, alpha);
     EmitVertex();
 
     pos.x += taille;
-    gl_Position = projection * view * pos;
-    fragColor = vec4(geomColor[0].xyz, alpha);
-    EmitVertex();
-
-    pos.y += taille;
-    gl_Position = projection * view * pos;
-    fragColor = vec4(geomColor[0].xyz, alpha);
-    EmitVertex();
-
-    EndPrimitive();
-
-
-
-    // 2EME TRIANGLE
-    gl_Position = projection * view * pos;
-    fragColor = vec4(geomColor[0].xyz, alpha);
+    gl_Position = camera * pos;
+    fragColor = vec4(couleur.xyz, alpha);
     EmitVertex();
 
     pos.x -= taille;
-    gl_Position = projection * view * pos;
-    fragColor = vec4(geomColor[0].xyz, alpha);
+    pos.y += taille;
+    gl_Position = camera * pos;
+    fragColor = vec4(couleur.xyz, alpha);
     EmitVertex();
 
-    pos.y -= taille;
-    gl_Position = projection * view * pos;
-    fragColor = vec4(geomColor[0].xyz, alpha);
+    pos.x += taille;
+    gl_Position = camera * pos;
+    fragColor = vec4(couleur.xyz, alpha);
     EmitVertex();
 
     EndPrimitive();
+
 
 }

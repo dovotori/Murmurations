@@ -21,12 +21,19 @@ class Echange
         void update(Camera *camera, GpuProcess *process, Forme *forme, Background *background);
         void draw();
     
+        inline void toggleGui(){ this->hideGui = !this->hideGui; };
+    
         void buttonPressed();
 
     protected:
     private:
+    
+        void updateGui(Camera *camera, GpuProcess *process, Forme *forme, Background *background);
+        void updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Background *background);
+    
         ofxOscReceiver receiver;
     
+        bool hideGui;
         ofxPanel gui;
         ofxFloatSlider masse, forceMax, rayonPath, vitesseGenerale, tailleParticule;
         ofxVec3Slider flockingForces, rotation;
