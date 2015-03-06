@@ -10,6 +10,7 @@ int main( ){
     
     
     // Verifie le support des cartes graphiques modernes
+    
     if(!ofGLCheckExtension("GL_ARB_geometry_shader4")
        && !ofGLCheckExtension("GL_EXT_geometry_shader4")
        && !ofIsGLProgrammableRenderer()){

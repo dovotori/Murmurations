@@ -22,10 +22,14 @@ void main()
     pos.z -= 0.5;
 
     float profondeur = pos.z;
-    float taille = (0.4 + (profondeur * 0.6)) * tailleParticule;
-    float alpha = 0.5 + (profondeur * 0.5);
+    float taille = (0.6 + (profondeur * 0.4)) * tailleParticule;
+    float alpha = 0.6 + (profondeur * 0.4);
 
     mat4 camera = projection * view * model;
+
+    // centre la forme
+    pos.x -= taille;
+    pos.y -= taille;
 
     // 1EME TRIANGLE
     gl_Position = camera * pos;

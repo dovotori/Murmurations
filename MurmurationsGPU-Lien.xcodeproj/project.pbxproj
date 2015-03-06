@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B821E9771AA9E18800D03E70 /* Noise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B821E9751AA9E18800D03E70 /* Noise.cpp */; };
 		B8481AAE1A5EE3C3001E79AB /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8481AAA1A5EE3C3001E79AB /* Camera.cpp */; };
 		B8481AAF1A5EE3C3001E79AB /* Echange.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8481AAC1A5EE3C3001E79AB /* Echange.cpp */; };
 		B8481AB51A5EE81F001E79AB /* Forme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8481AB31A5EE81F001E79AB /* Forme.cpp */; };
@@ -89,6 +90,8 @@
 
 /* Begin PBXFileReference section */
 		B80C61921A72BBCF00945C40 /* PingPongBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PingPongBuffer.h; sourceTree = "<group>"; };
+		B821E9751AA9E18800D03E70 /* Noise.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Noise.cpp; sourceTree = "<group>"; };
+		B821E9761AA9E18800D03E70 /* Noise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Noise.h; sourceTree = "<group>"; };
 		B8481AAA1A5EE3C3001E79AB /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		B8481AAB1A5EE3C3001E79AB /* Camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Camera.h; sourceTree = "<group>"; };
 		B8481AAC1A5EE3C3001E79AB /* Echange.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Echange.cpp; sourceTree = "<group>"; };
@@ -418,19 +421,21 @@
 			children = (
 				B8E8CB251A7B7B4200ABEC7C /* Background.cpp */,
 				B8E8CB261A7B7B4200ABEC7C /* Background.h */,
-				B80C61921A72BBCF00945C40 /* PingPongBuffer.h */,
-				B87C255F1A600F250044BDDD /* GpuProcess.cpp */,
-				B87C25601A600F250044BDDD /* GpuProcess.h */,
-				B8481AB61A5EFC94001E79AB /* Dessin.cpp */,
-				B8481AB71A5EFC94001E79AB /* Dessin.h */,
-				B8D826471A9F42F80086F726 /* Sphere.cpp */,
-				B8D826481A9F42F80086F726 /* Sphere.h */,
-				B8481AB31A5EE81F001E79AB /* Forme.cpp */,
-				B8481AB41A5EE81F001E79AB /* Forme.h */,
 				B8481AAA1A5EE3C3001E79AB /* Camera.cpp */,
 				B8481AAB1A5EE3C3001E79AB /* Camera.h */,
+				B8481AB61A5EFC94001E79AB /* Dessin.cpp */,
+				B8481AB71A5EFC94001E79AB /* Dessin.h */,
 				B8481AAC1A5EE3C3001E79AB /* Echange.cpp */,
 				B8481AAD1A5EE3C3001E79AB /* Echange.h */,
+				B8481AB31A5EE81F001E79AB /* Forme.cpp */,
+				B8481AB41A5EE81F001E79AB /* Forme.h */,
+				B87C255F1A600F250044BDDD /* GpuProcess.cpp */,
+				B87C25601A600F250044BDDD /* GpuProcess.h */,
+				B821E9751AA9E18800D03E70 /* Noise.cpp */,
+				B821E9761AA9E18800D03E70 /* Noise.h */,
+				B80C61921A72BBCF00945C40 /* PingPongBuffer.h */,
+				B8D826471A9F42F80086F726 /* Sphere.cpp */,
+				B8D826481A9F42F80086F726 /* Sphere.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
@@ -558,6 +563,7 @@
 				B8481AE71A5F00FD001E79AB /* UdpSocket.cpp in Sources */,
 				B8481AEA1A5F00FD001E79AB /* OscOutboundPacketStream.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
+				B821E9771AA9E18800D03E70 /* Noise.cpp in Sources */,
 				B8481AEB1A5F00FD001E79AB /* OscPrintReceivedElements.cpp in Sources */,
 				B87267661A9DF42A000024ED /* ofxSlider.cpp in Sources */,
 				B87267611A9DF42A000024ED /* ofxBaseGui.cpp in Sources */,

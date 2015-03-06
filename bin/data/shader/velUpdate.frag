@@ -73,7 +73,7 @@ uniform float distanceCohesion;
 
 vec3 flocking(vec3 pos, vec3 vel) {
 
-    float forceMax = 0.1;
+    float forceMax = 1.0;
 
     // SEPARATION ecarte les oiseaux
     vec3 forceSeparation = vec3(0.0);
@@ -95,7 +95,7 @@ vec3 flocking(vec3 pos, vec3 vel) {
             vec3 posVoisin = texture(posData, vec2(x, y)).xyz;
             vec3 velVoisin = texture(prevVelData, vec2(x, y)).xyz;
 
-            float distance = length(posVoisin - pos);
+            float distance = abs(length(posVoisin - pos));
 
             if(distance > 0) // exclue soit meme
             {
@@ -163,14 +163,22 @@ vec3 flocking(vec3 pos, vec3 vel) {
     }
 
 
+    
+    /////////////////////// TOTAL FLOCKING ///////////////////////
+    vec3 forces = (forceSeparation*0.5) + (forceAlignement*0.2) + (forceCohesion * 0.3);
+    forces /= masse;
+
+
+    /////////////////////// ON SORT DU CERCLE ///////////////////////
+    vec3 centreHive = vec3(0.5);
+    float rayonHive = 0.3;
+    float distanceHive = abs(length(pos - centreHive));
+    if(distanceHive > rayonHive){
+        vec3 forceHive = seekSteering(pos, centreHive, vel, 1.0, forceMax, masse);
+        forces = (forces*0.3) + (forceHive*0.7);
+    }
 
     /////////////////////// ON APPLIQUE ///////////////////////
-
-    // appliquer la masse
-    vec3 forces = forceSeparation;
-    forces += forceAlignement;
-    forces += forceCohesion;
-    forces /= masse;
 
     // on forme la nouvelle vitesse
     vel += forces;
@@ -298,12 +306,14 @@ vec3 followPath(vec3 pos, vec3 vel)
 ///////////////////////////////////////////// NOISE //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////*/
 
+uniform sampler2D texNoise;
 uniform float noiseMagnitude;
 
-vec3 noiseProcess(vec3 pos, vec3 vel){
-    vec3 noise = noise3(pos) * noiseMagnitude;
-    vec3 nextVel = vel + noise;
-    nextVel = limiter(nextVel, 1.0);
+vec3 noiseProcess(vec3 pos){
+    vec2 st = vec2(pos.xy / noiseMagnitude);
+    vec3 noise = texture(texNoise, st).xyz;
+    vec3 nextVel = vec3(0.01 + noise);
+    //nextVel = limiter(nextVel, 1.0);
     return nextVel;
 }
 
@@ -324,7 +334,7 @@ void main(void)
     vec3 nextVel = flocking(pos, vel) * rapportForces.x;
     nextVel += attract(pos, vel) * rapportForces.y;
     nextVel += followPath(pos, vel) * rapportForces.z;
-    //nextVel += noiseProcess(pos, vel) * rapportForces.w;
+    nextVel += noiseProcess(pos) * rapportForces.w;
 
     outputColor = vec4(nextVel, 1.0);
 

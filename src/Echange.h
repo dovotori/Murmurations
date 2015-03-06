@@ -35,7 +35,7 @@ class Echange
     
         bool hideGui;
         ofxPanel gui;
-        ofxFloatSlider masse, forceMax, rayonPath, vitesseGenerale, tailleParticule;
+        ofxFloatSlider masse, forceMax, rayonPath, vitesseGenerale, tailleParticule, zoom, noiseMagnitude;
         ofxVec3Slider flockingForces, rotation;
         ofxVec4Slider rapportModes;
         ofxColorSlider color;

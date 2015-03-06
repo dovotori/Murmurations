@@ -9,9 +9,9 @@
 #include "Sphere.h"
 #include "Background.h"
 #include "Echange.h"
+#include "Noise.h"
 
-#define NB 100
-
+#define NB 1000
 
 class Dessin
 {
@@ -36,8 +36,7 @@ class Dessin
         Sphere sphere;
         Background background;
         Echange echange;
-
-
+        Noise noise;
 };
 
 #endif // DESSIN_H

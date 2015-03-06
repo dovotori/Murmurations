@@ -5,10 +5,11 @@ layout(triangle_strip, max_vertices=4) out;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform vec4 couleur;
 uniform float tailleParticule;
 
 out vec2 fragTexture;
-
+out vec4 fragColor;
 
 
 void main()
@@ -28,22 +29,26 @@ void main()
 
     // 1EME TRIANGLE
     gl_Position = camera * pos;
+    fragColor = couleur;
     fragTexture = vec2(0.0, 0.0);
     EmitVertex();
 
     pos.x += taille;
     gl_Position = camera * pos;
+    fragColor = couleur;
     fragTexture = vec2(1.0, 0.0);
     EmitVertex();
 
     pos.x -= taille;
     pos.y += taille;
     gl_Position = camera * pos;
+    fragColor = couleur;
     fragTexture = vec2(0.0, 1.0);
     EmitVertex();
 
     pos.x += taille;
     gl_Position = camera * pos;
+    fragColor = couleur;
     fragTexture = vec2(1.0, 1.0);
     EmitVertex();
 

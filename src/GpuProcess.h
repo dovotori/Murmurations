@@ -14,7 +14,7 @@ class GpuProcess
 public:
     GpuProcess();
     virtual ~GpuProcess();
-    void setup(unsigned int nb = 1);
+    void setup(unsigned int nb, ofTexture& texNoise);
     void update();
     void resetPosition(unsigned int mode);
     void resetVelocity();

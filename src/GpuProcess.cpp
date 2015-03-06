@@ -14,7 +14,7 @@ GpuProcess::GpuProcess()
     this->sensAttraction = 1.0;
     this->posAttraction.set(0.5, 0.5, 0.5);
     
-    this->distanceFlocking.set(0.4, 0.8, 0.9);
+    this->distanceFlocking.set(0.02, 0.4, 1.0);
     this->rapportForces.set(1.0, 0.0, 0.0, 0.0);
     
     this->magnitudeNoise = 1.0;
@@ -32,11 +32,9 @@ GpuProcess::~GpuProcess()
 
 
 
-void GpuProcess::setup(unsigned int nb)
+void GpuProcess::setup(unsigned int nb, ofTexture& texNoise)
 {
-    this->numParticles = nb;
-
-    this->textureRes = (int)sqrt((float)this->numParticles);      // Definir la resolution de la texture en fonction du nombre de particules
+    this->textureRes = (int)sqrt((float)nb);      // Definir la resolution de la texture en fonction du nombre de particules
     this->numParticles = this->textureRes * this->textureRes;     // Redefinir le nombre de particules (pas de gachis)
 
     cout << "nombre de particules: " << this->numParticles << endl;
@@ -44,7 +42,13 @@ void GpuProcess::setup(unsigned int nb)
 
     this->setupPosition();
     this->setupVelocity();
-
+    
+    // envoi de la texture noise
+    this->updateVel.begin(); this->updateVel.setUniformTexture("texNoise", texNoise, 2); this->updateVel.end();
+    
+    // envoi des variables contantes
+    this->updatePos.begin(); this->updatePos.setUniform1i("resolution", (int)this->textureRes); this->updatePos.end();
+    this->updateVel.begin(); this->updateVel.setUniform1i("resolution", (int)this->textureRes); this->updateVel.end();
 }
 
 
@@ -88,9 +92,9 @@ void GpuProcess::resetPosition(unsigned int mode)
                  for (int y = 0; y < this->textureRes; y++){
                  int i = this->textureRes * y + x;
              
-                 pos[i*3 + 0] = 0.5; //ofMap(x, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0); // couleur est entre 0 et 1
-                 pos[i*3 + 1] = 0.5; //ofMap(y, 0, this->textureRes, 0, 1); //ofRandom(0.0, 1.0);
-                 pos[i*3 + 2] = 0.5; //ofRandom(0.0, 1.0);
+                 pos[i*3 + 0] = 0.5; // est entre 0 et 1
+                 pos[i*3 + 1] = 0.5;
+                 pos[i*3 + 2] = 0.5;
                 }
             }
             break;
@@ -158,7 +162,6 @@ void GpuProcess::computeGpuVelocity()
 
             this->updateVel.setUniformTexture("prevVelData", this->velPingPong.src->getTextureReference(), 0);   // passing the previus velocity information
             this->updateVel.setUniformTexture("posData", this->posPingPong.src->getTextureReference(), 1);  // passing the position information
-            this->updateVel.setUniform1i("resolution", (int)this->textureRes);
     
             // flock
             this->updateVel.setUniform1f("distanceSeparation", this->distanceFlocking.x);
@@ -204,7 +207,6 @@ void GpuProcess::computeGpuPosition()
             this->updatePos.setUniformTexture("prevPosData", this->posPingPong.src->getTextureReference(), 0); // Précendentes positions
             this->updatePos.setUniformTexture("velData", this->velPingPong.src->getTextureReference(), 1);  // Vitesses
             this->updatePos.setUniform1f("vitesseGenerale", this->vitesseGenerale );
-            this->updatePos.setUniform1i("resolution", (int)this->textureRes);
             this->posPingPong.src->draw(0, 0); // draw fbo source dans le fbo destination
 
         this->updatePos.end();
@@ -212,6 +214,7 @@ void GpuProcess::computeGpuPosition()
     this->posPingPong.dst->end();
 
     this->posPingPong.swap();
+    
 }
 
 

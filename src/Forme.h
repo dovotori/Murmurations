@@ -43,7 +43,7 @@ class Forme
 
 
         unsigned int textureRes;
-        unsigned int rendu;
+        unsigned int rendu, nbRendu;
         float cpt, noiseInfluence, noiseScale, taille;
         ofVec3f rotation;
         ofVec4f couleur;
