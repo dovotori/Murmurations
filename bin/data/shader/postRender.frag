@@ -24,16 +24,13 @@ void main() {
 
 	float alpha = 1.0;
 	if(noiseInfluence < 2.0) {
-		// fond
 		if(color.x <= 0.0)
 		{
 			float evolution = 0.5 + (cos(cpt) * 0.5); 
 			alpha = random( vec2( noiseScale ), length( st ), st * evolution ); // noise // scale est cool, fait du moirage en dessous de 1
 			alpha = (1.0 - noiseInfluence) + (alpha * noiseInfluence); // attenuation du noise
-			alpha = 0.0;
 		} 
 	} else {
-		// fond 
 		if(color.x <= 0.0){ alpha = 0.0; }
 	}
 

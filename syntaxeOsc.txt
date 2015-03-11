@@ -1,5 +1,4 @@
 /max2P5/vitesseMax
-/max2P5/forces XYZA
 
 /max2P5/attractionForce
 /max2P5/attractionSens
@@ -11,11 +10,12 @@
 /max2P5/noiseMagnitude
 
 /max2P5/flockForces XYZ
+/max2P5/flockAmplitudes XYZ
 /max2P5/flockMasse 
+
 
 /max2P5/typeRendu (int)
 /max2P5/birdColor RVBA
-/max2P5/tailleParticule
 
 /max2P5/backgroundAlpha (float entre 0 et 1)
 /max2P5/backgroundImg (entier)

@@ -22,6 +22,5 @@ public:
 private:
     Camera camera;
     Dessin dessin;
-    bool isFullscreen;
     
 };

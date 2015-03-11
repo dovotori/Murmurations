@@ -12,11 +12,14 @@ class Forme
         Forme();
         virtual ~Forme();
         void setup(unsigned int nb = 1);
-        void draw(Camera *camera, ofTexture& texPos, ofTexture& texVel);
-
+        void draw(Camera *camera, ofTexture& texPos, ofTexture& texVel, ofTexture& formTex);
+    
         inline void setRendu(unsigned int rendu) {
             this->rendu = rendu;
             switch(rendu) {
+                case 1:
+                    this->mesh.setMode(OF_PRIMITIVE_LINES);
+                    break;
                 default:
                     this->mesh.setMode(OF_PRIMITIVE_POINTS);
                     break;
@@ -27,10 +30,10 @@ class Forme
         inline void setRotation(float x, float y, float z){ this->rotation.set(x, y, z); };
         inline void setCouleur(float x, float y, float z, float a){ this->couleur.set(x, y, z, a); };
         inline void setTaille(float valeur){ this->taille = valeur; };
-
+    
         inline float getNoiseInfluence(){ return this->noiseInfluence; };
-
-
+    
+    
     protected:
     private:
 
@@ -43,7 +46,7 @@ class Forme
 
 
         unsigned int textureRes;
-        unsigned int rendu, nbRendu;
+        unsigned int rendu;
         float cpt, noiseInfluence, noiseScale, taille;
         ofVec3f rotation;
         ofVec4f couleur;

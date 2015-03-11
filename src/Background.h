@@ -16,14 +16,13 @@ public:
     void draw();
     
     inline void setAlpha(float value){ this->alpha = value; };
-    inline void setImage(unsigned int value){ if(value > -1 && value < this->nbImages){ this->currentImage = value; } else { this->currentImage = 0; } };
     
 protected:
 private:
     ofMesh screen;
     ofShader shader;
-    ofImage *image;
-    unsigned int nbImages, currentImage;
+    ofFbo fbo;
+    
     float alpha;
 
     
