@@ -4,6 +4,8 @@ Background::Background()
 {
     //ctor
     this->alpha = 0.0;
+    this->nbImages = 2;
+    this->currentImage = 0;
 }
 
 
@@ -38,13 +40,13 @@ void Background::setup()
     
     
     // CHARGER FBO
-    ofImage image;
-    image.loadImage("image/background_1.jpg");
-    this->fbo.allocate(ofGetWindowWidth(), ofGetWindowHeight(), GL_RGB32F);
-    this->fbo.begin();
-        ofClear(0, 0, 0, 255);
-        image.draw(0, 0);
-    this->fbo.end();
+    this->image = new ofImage[this->nbImages];
+    for(int i = 0; i < this->nbImages; i++)
+    {
+        stringstream ss;
+        ss << "image/background_" << i << ".jpg";
+        this->image[i].loadImage(ss.str());
+    }
 }
 
 
@@ -58,7 +60,7 @@ void Background::draw()
     
     this->shader.begin();
         this->shader.setUniform1f("alpha", this->alpha);
-        this->shader.setUniformTexture("tex", this->fbo.getTextureReference(0), 0);
+        this->shader.setUniformTexture("tex", this->image[this->currentImage].getTextureReference(), 0);
         this->shader.setUniform2f("resolution", ofGetWindowWidth(), ofGetWindowHeight());
         this->screen.draw();
     this->shader.end();

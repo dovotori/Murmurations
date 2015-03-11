@@ -17,17 +17,13 @@ out vec4 outputColor;
 
 vec3 limiter(vec3 v, float max)
 {
-    vec3 resultat = v;
-    float longueurCarre = (resultat.x * resultat.x) + (resultat.y * resultat.y) + (resultat.z * resultat.z);
-
+    float longueurCarre = (v.x * v.x) + (v.y * v.y) + (v.z * v.z);
     if( ( longueurCarre > max * max ) && ( longueurCarre > 0 ) )
     {
         float ratio = max / sqrt( longueurCarre );
-        resultat.x *= ratio;
-        resultat.y *= ratio;
-        resultat.z *= ratio;
+        v *= ratio;
     }
-    return resultat;
+    return v;
 }
 
 
@@ -73,8 +69,6 @@ uniform float distanceCohesion;
 
 vec3 flocking(vec3 pos, vec3 vel) {
 
-    float forceMax = 0.1;
-
     // SEPARATION ecarte les oiseaux
     vec3 forceSeparation = vec3(0.0);
     int cptSeparation = 0;
@@ -92,20 +86,18 @@ vec3 flocking(vec3 pos, vec3 vel) {
     {
         for(x = 0; x < resolution; x++)
         {
-            vec3 posVoisin = texture(posData, vec2(x, y)).xyz;
-            vec3 velVoisin = texture(prevVelData, vec2(x, y)).xyz;
+            vec3 posVoisin = texture(posData, vec2(float(x) / float(resolution), y / float(resolution) ) ).xyz;
+            vec3 velVoisin = texture(prevVelData, vec2(float(x) / float(resolution), float(y) / float(resolution ) ) ).xyz;
 
             float distance = length(posVoisin - pos);
 
-            if(distance > 0) // exclue soit meme
+            if(distance > 0.0) // exclue soit meme
             {
+
                 // SEPARATION
                 if(distance < distanceSeparation)
                 {
-                    vec3 ajoutForce = pos - posVoisin;
-                    ajoutForce = normalize(ajoutForce);
-                    ajoutForce /= distance; // plus le voisin est loin moins la force est importante
-                    forceSeparation += ajoutForce;
+                    forceSeparation += (pos - posVoisin) / distance;
                     cptSeparation++;
                 }
 
@@ -132,19 +124,17 @@ vec3 flocking(vec3 pos, vec3 vel) {
 
     // SEPARATION
     if(cptSeparation > 0) {
-        forceSeparation /= cptSeparation; // divise par le nombre de voisin
+        forceSeparation /= float(cptSeparation); // divise par le nombre de voisin
+    
+        if(length(forceSeparation) > 0.0)
+        {
+            forceSeparation = normalize(forceSeparation);
+
+            // steer
+            forceSeparation -= vel;
+            forceSeparation = limiter(forceSeparation, forceMax);
+        } 
     }
-
-
-    if(length(forceSeparation) > 0)
-    {
-        forceSeparation = normalize(forceSeparation);
-
-        // steer
-        forceSeparation -= vel;
-        forceSeparation = limiter(forceSeparation, forceMax);
-    }
-
 
     // ALIGNEMENT
     if(cptAlignement > 0) {
@@ -159,23 +149,25 @@ vec3 flocking(vec3 pos, vec3 vel) {
     // COHESION
     if(cptCohesion > 0) {
         forceCohesion /= cptCohesion;
-        forceCohesion = seekSteering(pos, forceCohesion, vel, 1.0, forceMax, masse);
+        forceCohesion = seek(pos, forceCohesion, 1.0);
+        forceCohesion = limiter(forceCohesion, forceMax);
     }
 
+    /////////////////////// TOTAL FLOCKING ///////////////////////
+    vec3 forces = ( (forceSeparation * 4.0) + (forceAlignement * 2.0) + forceCohesion ) / masse;
 
+    /////////////////////// ON SORT DU CERCLE ///////////////////////
+    vec3 centreHive = vec3(0.5);
+    float rayonHive = 0.3;
+    float distanceHive = length(centreHive - pos);
+    if(distanceHive > rayonHive){
+        vec3 forceHive = seekSteering(pos, centreHive, forces, 1.0, forceMax, masse);
+        forces = forces + (forceHive * 4.0);
+    }
 
     /////////////////////// ON APPLIQUE ///////////////////////
-
-    // appliquer la masse
-    vec3 forces = forceSeparation;
-    forces += forceAlignement;
-    forces += forceCohesion;
-    forces /= masse;
-
-    // on forme la nouvelle vitesse
     vel += forces;
     vel = limiter(vel, 1.0);
-
     return vel;
 
 }
@@ -221,6 +213,7 @@ vec3 attract(vec3 pos, vec3 vel)
 ////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 uniform float rayonPath;
+uniform int path;
 
 
 vec3 getPathTarget(vec3 predictionPos, vec3 origine, vec3 destination)
@@ -243,10 +236,21 @@ vec3 followPath(vec3 pos, vec3 vel)
     vec3 predictionPos = pos; 
 
     vec3 pointsPath[4];
-    pointsPath[0] = vec3(0.3, 0.5, 0.5);
-    pointsPath[1] = vec3(0.4, 0.3, 0.5);
-    pointsPath[2] = vec3(0.6, 0.7, 0.5);
-    pointsPath[3] = vec3(0.7, 0.5, 0.5);
+    switch(path)
+    {
+        case 0: // croissement
+            pointsPath[0] = vec3(0.3, 0.5, 0.5);
+            pointsPath[1] = vec3(0.4, 0.3, 0.5);
+            pointsPath[2] = vec3(0.6, 0.7, 0.5);
+            pointsPath[3] = vec3(0.7, 0.5, 0.5);
+            break;
+        case 1: // cube
+            pointsPath[0] = vec3(0.3, 0.3, 0.3);
+            pointsPath[1] = vec3(0.4, 0.3, 0.5);
+            pointsPath[2] = vec3(0.6, 0.7, 0.5);
+            pointsPath[3] = vec3(0.7, 0.5, 0.5);
+            break;
+    }
 
     float distancePlusProche = 100000.0;
     vec3 destination = vec3(0.0);
@@ -298,13 +302,14 @@ vec3 followPath(vec3 pos, vec3 vel)
 ///////////////////////////////////////////// NOISE //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////*/
 
+uniform sampler2D texNoise;
 uniform float noiseMagnitude;
 
-vec3 noiseProcess(vec3 pos, vec3 vel){
-    vec3 noise = noise3(pos) * noiseMagnitude;
-    vec3 nextVel = vel + noise;
-    nextVel = limiter(nextVel, 1.0);
-    return nextVel;
+vec3 noiseProcess(vec3 pos)
+{
+    vec2 st = pos.xy;
+    vec3 noise = texture(texNoise, st).xyz; // st doit etre entre 0 et 1
+    return noise;
 }
 
 
@@ -324,7 +329,7 @@ void main(void)
     vec3 nextVel = flocking(pos, vel) * rapportForces.x;
     nextVel += attract(pos, vel) * rapportForces.y;
     nextVel += followPath(pos, vel) * rapportForces.z;
-    //nextVel += noiseProcess(pos, vel) * rapportForces.w;
+    nextVel += noiseProcess(pos) * rapportForces.w;
 
     outputColor = vec4(nextVel, 1.0);
 

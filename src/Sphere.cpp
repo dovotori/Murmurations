@@ -5,6 +5,9 @@
 Sphere::Sphere()
 {
     this->cpt = 0.0;
+    this->nbPoints = 0;
+    this->textureRes = 0;
+    this->texScreen.allocate(100, 100, GL_RGBA);
 }
 
 Sphere::~Sphere()
@@ -15,14 +18,17 @@ Sphere::~Sphere()
 
 void Sphere::setup()
 {
-    
+
     this->model.makeIdentityMatrix();
     this->shader.load("shader/basic");
     this->mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     //this->setupClassic();
     this->setupGeodesic(1);
     this->generateTexture();
-    
+
+    this->nbPoints = this->mesh.getNumVertices();
+
+    cout << "textureRes: " << this->textureRes << " // nbPoints: " << this->nbPoints << endl;
 }
 
 
@@ -31,20 +37,22 @@ void Sphere::setup()
 void Sphere::draw(Camera *camera)
 {
     this->cpt += 1.0;
-    
+
     this->model.makeIdentityMatrix();
     this->model.rotate(90.0, 1.0, 0.0, 0.0);
     this->model.rotate(this->cpt, 0.0, 1.0, 1.0);
-    
+
     this->shader.begin();
-    
+
     this->shader.setUniformMatrix4f("model", this->model);
     this->shader.setUniformMatrix4f("view", camera->getViewMatrix());
     this->shader.setUniformMatrix4f("projection", camera->getProjectionMatrix());
-    
+
     this->mesh.draw();
-    
+
     this->shader.end();
+    
+    this->texScreen.loadScreenData(0,0,100,100);
 }
 
 
@@ -52,9 +60,9 @@ void Sphere::draw(Camera *camera)
 
 void Sphere::generateTexture()
 {
-    
+
     this->textureRes = (int)sqrt((float)this->mesh.getNumVertices());      // Definir la resolution de la texture en fonction du nombre de points
-    
+
     float * pos = new float[this->textureRes*this->textureRes*3];
     for(int i = 0; i < this->textureRes*this->textureRes; i++)
     {
@@ -68,13 +76,13 @@ void Sphere::generateTexture()
             pos[i*3 + 1] = 0.0;
             pos[i*3 + 2] = 0.0;
         }
-        
+
     }
     this->fbo.allocate(this->textureRes, this->textureRes, GL_RGB);
     this->fbo.getTextureReference().loadData(pos, this->textureRes, this->textureRes, GL_RGB);
-    
+
     delete [] pos;
-    
+
 }
 
 
@@ -82,34 +90,34 @@ void Sphere::generateTexture()
 
 void Sphere::setupClassic()
 {
-    
+
     float * pos = new float[10*3];
-    
+
     double r = 10.0;
     int lats = 10; int longs = 10;
-    
+
     int i, j;
     for (i = 0; i <= lats; i++)
     {
         double lat0 = M_PI * (-0.5 + (double)(i - 1) / lats);
         double z0 = sin(lat0);
         double zr0 = cos(lat0);
-        
+
         double lat1 = M_PI * (-0.5 + (double)i / lats);
         double z1 = sin(lat1);
         double zr1 = cos(lat1);
-        
+
         for (j = 0; j <= longs; j++)
         {
             double lng = 2 * M_PI * (double)(j - 1) / longs;
             double x = cos(lng);
             double y = sin(lng);
-            
+
             this->mesh.addVertex(ofVec3f(x * zr0, y * zr0, z0));
             this->mesh.addVertex(ofVec3f(x * zr1, y * zr1, z1));
         }
     }
-    
+
     delete [] pos;
 }
 
@@ -142,7 +150,7 @@ void Sphere::setupGeodesic(const unsigned int depth)
     {
         subdivide(vdata[tindices[i][0]], vdata[tindices[i][1]], vdata[tindices[i][2]], depth);
     }
-    
+
     cout << this->mesh.getNumVertices() << endl;
 }
 

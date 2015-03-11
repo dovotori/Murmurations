@@ -14,8 +14,8 @@ class GpuProcess
 public:
     GpuProcess();
     virtual ~GpuProcess();
-    void setup(unsigned int nb = 1);
-    void update();
+    void setup(unsigned int nb);
+    void update(ofTexture& texNoise);
     void resetPosition(unsigned int mode);
     void resetVelocity();
     inline void drawDebugTexture(){ this->velPingPong.dst->draw(0, 0); };
@@ -38,6 +38,7 @@ public:
     inline void setMasse(float value){ this->masse = value; };
     inline void setForceMax(float value){ this->forceMax = value; };
     inline void setRayonPath(float value){ this->rayonPath = value; };
+    inline void setPath(unsigned int value){ if(value < this->nbPath){ this->path = value; } else { this->path = 0; } };
 
 
 protected:
@@ -46,7 +47,7 @@ private:
     void setupVelocity();
 
     void computeGpuPosition();
-    void computeGpuVelocity();
+    void computeGpuVelocity(ofTexture& texNoise);
 
     ofShader updatePos;
     ofShader updateVel;
@@ -66,6 +67,8 @@ private:
     ofVec4f rapportForces;
     
     float magnitudeNoise, masse, forceMax, rayonPath;
+    
+    unsigned int path, nbPath;
 
 };
 
