@@ -11,12 +11,12 @@ class Camera
         void setup();
         void updateView();
         void updateProjection();
+        void rotation(ofVec2f angle, float zoom);
 
         inline void setPosition(float x, float y, float z){ this->position.set(x, y, z); this->updateView(); };
         inline void setNearFar(float n, float f){ this->near = n; this->far = f; this->updateProjection(); };
         inline void setTarget(float x, float y, float z){ this->target.set(x, y, z); };
         inline void setAngle(float valeur){ this->angle = valeur; this->updateProjection(); };
-
 
         inline ofMatrix4x4 getIdentityMatrix(){ return this->identity; }
         inline ofMatrix4x4 getViewMatrix(){ return this->view; }
@@ -31,7 +31,7 @@ class Camera
         ofMatrix4x4 view, projection, identity;
         ofVec3f position, target;
         float angle, near, far;
-    
+
 
 };
 

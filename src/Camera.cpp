@@ -26,6 +26,7 @@ void Camera::setup()
 
 
 void Camera::updateView(){
+
     this->view.makeLookAtViewMatrix(this->position, this->target, ofVec3f(0, 1, 0));
 }
 
@@ -35,4 +36,16 @@ void Camera::updateProjection(){
 
 
 
+void Camera::rotation(ofVec2f angle, float zoom)
+{
+
+    angle *= 360.0;
+    float x = zoom * sin( angle.x * M_PI / 360.0 ) * cos( angle.y * M_PI / 360.0 );
+    float y = zoom * sin( angle.y * M_PI / 360.0 );
+    float z = zoom * cos( angle.x * M_PI / 360.0 ) * cos( angle.y * M_PI / 360.0 );
+
+    this->position.set(x, y, z);
+    this->updateView();
+
+}
 

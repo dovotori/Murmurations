@@ -15,12 +15,30 @@ float random(vec2 scale, float seed, vec2 variations)
 { return fract( sin( dot( variations + seed, scale ) ) * 43758.5453 + seed ); }
 
 
-void main() {
-	
-	vec2 st = fragTexture * resolution; // map les coor de 0,1 à 0,taille de texture
+vec4 blurV(vec2 st)
+{
+   vec4 color = vec4(0.0);
 
-	vec4 color = texture( fboTexture, st );
+   float blur = 4.0 / resolution.x;
+ 
+   // blur in y (vertical)
+   // take nine samples, with the distance blurSize between them
+   color += texture(fboTexture, vec2(st.x, st.y - 4.0*blur)) * 0.05;
+   color += texture(fboTexture, vec2(st.x, st.y - 3.0*blur)) * 0.09;
+   color += texture(fboTexture, vec2(st.x, st.y - 2.0*blur)) * 0.12;
+   color += texture(fboTexture, vec2(st.x, st.y - blur)) * 0.15;
+   color += texture(fboTexture, vec2(st.x, st.y)) * 0.16;
+   color += texture(fboTexture, vec2(st.x, st.y + blur)) * 0.15;
+   color += texture(fboTexture, vec2(st.x, st.y + 2.0*blur)) * 0.12;
+   color += texture(fboTexture, vec2(st.x, st.y + 3.0*blur)) * 0.09;
+   color += texture(fboTexture, vec2(st.x, st.y + 4.0*blur)) * 0.05;
+ 
+   return color;
+}
 
+
+vec4 noiseEffect(vec2 st, vec4 color)
+{
 
 	float alpha = 1.0;
 	if(noiseInfluence < 2.0) {
@@ -36,9 +54,18 @@ void main() {
 		// fond 
 		if(color.x <= 0.0){ alpha = 0.0; }
 	}
+	return vec4(color.xyz, alpha);
+}
 
+
+void main() {
 	
+	vec2 st = fragTexture * resolution; // map les coor de 0,1 à 0,taille de texture
+	vec4 color = texture( fboTexture, st );
 
-    outputColor = vec4(color.xyz, alpha);
+	//vec4 colorNoise = noiseEffect(st, color);
+	//vec4 colorBlur = blurV(st);
+
+	outputColor = color;
 
 }

@@ -1,6 +1,5 @@
 #version 330
 
-
 in vec4 position;
 in vec2 texcoord;
 

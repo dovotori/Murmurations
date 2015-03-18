@@ -22,13 +22,10 @@ class Forme
                     break;
             }
         };
-        inline void setNoiseInfluence(float value){ this->noiseInfluence = value; };
-        inline void setNoiseScale(float value){ this->noiseScale = value; };
+
         inline void setRotation(float x, float y, float z){ this->rotation.set(x, y, z); };
         inline void setCouleur(float x, float y, float z, float a){ this->couleur.set(x, y, z, a); };
         inline void setTaille(float valeur){ this->taille = valeur; };
-
-        inline float getNoiseInfluence(){ return this->noiseInfluence; };
 
 
     protected:
@@ -36,15 +33,12 @@ class Forme
 
         ofMatrix4x4 model;
         ofShader *shader;
-        ofShader postShader;
         ofVboMesh mesh;
-        ofFbo fbo;
         ofImage textureParticule;
-
 
         unsigned int textureRes;
         unsigned int rendu, nbRendu;
-        float cpt, noiseInfluence, noiseScale, taille;
+        float taille;
         ofVec3f rotation;
         ofVec4f couleur;
 

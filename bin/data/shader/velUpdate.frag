@@ -61,10 +61,8 @@ vec3 seekSteering(vec3 position, vec3 cible, vec3 vitesse, float vitesseMax, flo
 uniform float masse;
 uniform float forceMax;
 
-uniform float distanceSeparation;
-uniform float distanceAlignement;
-uniform float distanceCohesion;
-
+uniform vec3 flockDistance;
+uniform vec3 flockAmplitude;
 
 
 vec3 flocking(vec3 pos, vec3 vel) {
@@ -95,21 +93,21 @@ vec3 flocking(vec3 pos, vec3 vel) {
             {
 
                 // SEPARATION
-                if(distance < distanceSeparation)
+                if(distance < flockDistance.x)
                 {
                     forceSeparation += (pos - posVoisin) / distance;
                     cptSeparation++;
                 }
 
                 // ALIGNEMENT
-                if(distance < distanceAlignement)
+                if(distance < flockDistance.y)
                 {
                     forceAlignement += velVoisin;
                     cptAlignement++;
                 }
 
                 // COHESION
-                if(distance < distanceCohesion)
+                if(distance < flockDistance.z)
                 {
                     forceCohesion += posVoisin;
                     cptCohesion++;
@@ -154,17 +152,29 @@ vec3 flocking(vec3 pos, vec3 vel) {
     }
 
     /////////////////////// TOTAL FLOCKING ///////////////////////
-    vec3 forces = ( (forceSeparation * 4.0) + (forceAlignement * 2.0) + forceCohesion ) / masse;
+    vec3 forces = forceSeparation * flockAmplitude.x;
+    forces += forceAlignement * flockAmplitude.y;
+    forces += forceCohesion * flockAmplitude.z;
+    forces /= masse;
+    
 
     /////////////////////// ON SORT DU CERCLE ///////////////////////
+    //*
     vec3 centreHive = vec3(0.5);
     float rayonHive = 0.3;
     float distanceHive = length(centreHive - pos);
     if(distanceHive > rayonHive){
+        float dif = ( distanceHive - rayonHive ) * 4.0;
         vec3 forceHive = seekSteering(pos, centreHive, forces, 1.0, forceMax, masse);
-        forces = forces + (forceHive * 4.0);
+        forces = forceHive * dif;
     }
-
+    //*/
+    /*
+    vec3 centreHive = vec3(0.5);
+    float distanceHive = length(centreHive - pos);
+    vec3 forceHive = seekSteering(pos, centreHive, forces, 1.0, forceMax, masse);
+    forces = forces + ( forceHive * distanceHive * distanceHive );
+    */
     /////////////////////// ON APPLIQUE ///////////////////////
     vel += forces;
     vel = limiter(vel, 1.0);
@@ -199,7 +209,7 @@ vec3 attract(vec3 pos, vec3 vel)
     {
         float t = pow((distance/radious), ramp);
         float force = (1.0 / t) - 1.0;
-        nextVel = vel + (dif * force);
+        nextVel = vel + (dif * force /* strength*/);
     } else {
         nextVel = vel;
     }
@@ -239,16 +249,16 @@ vec3 followPath(vec3 pos, vec3 vel)
     switch(path)
     {
         case 0: // croissement
-            pointsPath[0] = vec3(0.3, 0.5, 0.5);
-            pointsPath[1] = vec3(0.4, 0.3, 0.5);
-            pointsPath[2] = vec3(0.6, 0.7, 0.5);
-            pointsPath[3] = vec3(0.7, 0.5, 0.5);
+            pointsPath[0] = vec3(0.3, 0.5, 0.3);
+            pointsPath[1] = vec3(0.4, 0.3, 0.8);
+            pointsPath[2] = vec3(0.6, 0.7, 0.7);
+            pointsPath[3] = vec3(0.7, 0.5, 0.2);
             break;
         case 1: // cube
             pointsPath[0] = vec3(0.3, 0.3, 0.3);
             pointsPath[1] = vec3(0.4, 0.3, 0.5);
-            pointsPath[2] = vec3(0.6, 0.7, 0.5);
-            pointsPath[3] = vec3(0.7, 0.5, 0.5);
+            pointsPath[2] = vec3(0.6, 0.7, 0.7);
+            pointsPath[3] = vec3(0.7, 0.5, 0.3);
             break;
     }
 
@@ -307,7 +317,7 @@ uniform float noiseMagnitude;
 
 vec3 noiseProcess(vec3 pos)
 {
-    vec2 st = pos.xy;
+    vec2 st = pos.xy / noiseMagnitude;
     vec3 noise = texture(texNoise, st).xyz; // st doit etre entre 0 et 1
     return noise;
 }
@@ -326,10 +336,10 @@ void main(void)
     vec3 pos = texture(posData, st).xyz;      // ... for getting the position data
     vec3 vel = texture(prevVelData, st).xyz;  // and the velocity
 
-    vec3 nextVel = flocking(pos, vel) * rapportForces.x;
-    nextVel += attract(pos, vel) * rapportForces.y;
-    nextVel += followPath(pos, vel) * rapportForces.z;
-    nextVel += noiseProcess(pos) * rapportForces.w;
+    vec3 nextVel = flocking(pos, vel) * (rapportForces.x+0.0001); // peut pas etre à zero car ne repartira pas
+    nextVel += followPath(pos, vel) * (rapportForces.y+0.0001);
+    nextVel += noiseProcess(pos) * rapportForces.z;
+    nextVel += attract(pos, vel) * rapportForces.w;
 
     outputColor = vec4(nextVel, 1.0);
 

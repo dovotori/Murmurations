@@ -6,10 +6,12 @@
 #include "Camera.h"
 #include "GpuProcess.h"
 #include "Forme.h"
+#include "Ligne.h"
 #include "Sphere.h"
 #include "Background.h"
 #include "Echange.h"
 #include "Noise.h"
+#include "Effet.h"
 
 #define NB 1000
 
@@ -37,6 +39,8 @@ class Dessin
         Background background;
         Echange echange;
         Noise noise;
+        Ligne ligne;
+        Effet effet;
 };
 
 #endif // DESSIN_H

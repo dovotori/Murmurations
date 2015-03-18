@@ -7,17 +7,17 @@
 
 class Background
 {
-    
+
 public:
     Background();
     virtual ~Background();
     void setup();
     void update();
     void draw();
-    
+
     inline void setAlpha(float value){ this->alpha = value; };
     inline void setImage(unsigned int value){ if(value < this->nbImages){ this->currentImage = value; } else { this->currentImage = 0; } };
-    
+
 protected:
 private:
     ofMesh screen;
@@ -26,7 +26,9 @@ private:
     unsigned int nbImages, currentImage;
     float alpha;
 
-    
+    ofDirectory dossier;
+
+
 };
 
-#endif 
+#endif

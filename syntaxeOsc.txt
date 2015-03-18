@@ -1,5 +1,5 @@
 /max2P5/vitesseMax
-/max2P5/forces XYZA
+/max2P5/forces XYZA 
 
 /max2P5/attractionForce
 /max2P5/attractionSens
@@ -10,7 +10,7 @@
 
 /max2P5/noiseMagnitude
 
-/max2P5/flockForces XYZ
+/max2P5/flock XYZA (separation / alignement / cohesion / hive)
 /max2P5/flockMasse 
 
 /max2P5/typeRendu (int)

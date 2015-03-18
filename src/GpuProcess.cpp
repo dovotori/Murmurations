@@ -8,20 +8,21 @@ GpuProcess::GpuProcess()
 {
     //ctor
     this->vitesseGenerale = 0.005;
-    
+    this->rapportForces.set(1.0, 0.0, 0.0, 0.0);
+
     this->forceAttraction = 1.0;
     this->rayonAttraction = 0.5;
     this->sensAttraction = 1.0;
     this->posAttraction.set(0.5, 0.5, 0.5);
-    
-    this->distanceFlocking.set(0.02, 0.4, 1.0);
-    this->rapportForces.set(1.0, 0.0, 0.0, 0.0);
-    
+
+    this->distancesFlocking.set(0.02, 0.1, 0.2);
+    this->forcesFlocking.set(1.0, 0.6, 0.4);
+
     this->magnitudeNoise = 1.0;
     this->masse = 4.0;
     this->forceMax = 0.1;
     this->rayonPath = 0.04;
-    
+
     this->path = 0;
     this->nbPath = 2;
 }
@@ -37,15 +38,12 @@ GpuProcess::~GpuProcess()
 
 void GpuProcess::setup(unsigned int nb)
 {
-    this->textureRes = (int)sqrt((float)nb);      // Definir la resolution de la texture en fonction du nombre de particules
-    this->numParticles = this->textureRes * this->textureRes;     // Redefinir le nombre de particules (pas de gachis)
-
-    cout << "nombre de particules: " << this->numParticles << endl;
-    cout << "resolution de la texture: " << this->textureRes << endl;
+    this->textureRes = nb;
+    this->numParticles = this->textureRes * this->textureRes;
 
     this->setupPosition();
     this->setupVelocity();
-    
+
     // envoi des variables contantes
     this->updatePos.begin(); this->updatePos.setUniform1i("resolution", (int)this->textureRes); this->updatePos.end();
     this->updateVel.begin(); this->updateVel.setUniform1i("resolution", (int)this->textureRes); this->updateVel.end();
@@ -82,9 +80,9 @@ void GpuProcess::setupVelocity()
 
 void GpuProcess::resetPosition(unsigned int mode)
 {
-    
+
     float * pos = new float[this->numParticles*3];
-    
+
     switch(mode)
     {
         case 0: /// CENTRE ///
@@ -99,7 +97,7 @@ void GpuProcess::resetPosition(unsigned int mode)
                 }
             }
             break;
-            
+
         case 1: /// GRID 2D ///
             for (int y = 0; y < this->textureRes; y++)
             {
@@ -112,16 +110,16 @@ void GpuProcess::resetPosition(unsigned int mode)
                 }
             }
             break;
-            
-            
+
+
         case 2: //// CUBE ////
             int cote = floor( pow( this->numParticles, (1.0/3.0) ) );
             int cpt = 0;
-            
+
             for (int z = 0; z < cote; z++) {
                 for (int y = 0; y < cote; y++) {
                     for (int x = 0; x < cote; x++) {
-                        
+
                         pos[cpt*3 + 0] = ofMap(x, 0, cote-1, 0, 1);
                         pos[cpt*3 + 1] = ofMap(y, 0, cote-1, 0, 1);
                         pos[cpt*3 + 2] = ofMap(z, 0, cote-1, 0, 1);
@@ -146,7 +144,7 @@ void GpuProcess::resetVelocity()
     for (int i = 0; i < this->numParticles; i++){
         vel[i*3 + 0] = ofRandom(-1.0, 1.0);
         vel[i*3 + 1] = ofRandom(-1.0, 1.0);
-        vel[i*3 + 2] = ofRandom(-1.0, 1.0);
+        vel[i*3 + 2] = 0.0;//ofRandom(-1.0, 1.0);
     }
     this->velPingPong.src->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGB);
     this->velPingPong.dst->getTextureReference().loadData(vel, this->textureRes, this->textureRes, GL_RGB);
@@ -175,15 +173,12 @@ void GpuProcess::computeGpuVelocity(ofTexture& texNoise)
 
             this->updateVel.setUniformTexture("prevVelData", this->velPingPong.src->getTextureReference(), 0);   // passing the previus velocity information
             this->updateVel.setUniformTexture("posData", this->posPingPong.src->getTextureReference(), 1);  // passing the position information
-    
-            // flock
-            this->updateVel.setUniform1f("distanceSeparation", this->distanceFlocking.x);
-            this->updateVel.setUniform1f("distanceAlignement", this->distanceFlocking.y);
-            this->updateVel.setUniform1f("distanceCohesion", this->distanceFlocking.z);
             this->updateVel.setUniform4fv("rapportForces", this->rapportForces.getPtr());
-    
             this->updateVel.setUniform1f("masse", this->masse);
             this->updateVel.setUniform1f("forceMax", this->forceMax);
+            // flock
+            this->updateVel.setUniform3fv("flockDistance", this->distancesFlocking.getPtr());
+            this->updateVel.setUniform3fv("flockAmplitude", this->forcesFlocking.getPtr());
             // noise
             this->updateVel.setUniformTexture("texNoise", texNoise, 2);
             this->updateVel.setUniform1f("noiseMagnitude", this->magnitudeNoise);
@@ -195,7 +190,7 @@ void GpuProcess::computeGpuVelocity(ofTexture& texNoise)
             // path
             this->updateVel.setUniform1f("rayonPath", this->rayonPath);
             this->updateVel.setUniform1i("path", this->path);
-                
+
             this->velPingPong.src->draw(0, 0); // draw the source velocity texture to be updated
 
         this->updateVel.end();
@@ -228,11 +223,13 @@ void GpuProcess::computeGpuPosition()
     this->posPingPong.dst->end();
 
     this->posPingPong.swap();
-    
+
 }
 
 
 
-
-
-
+void GpuProcess::draw()
+{
+    this->posPingPong.src->draw(580, 0, 100, 100);
+    this->velPingPong.src->draw(700, 0, 100, 100);
+}

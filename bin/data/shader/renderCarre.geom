@@ -2,10 +2,10 @@
 layout(points) in;
 layout(triangle_strip, max_vertices=4) out;
 
-uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform vec4 couleur;
+uniform vec3 cameraPos;
 uniform float tailleParticule;
 
 out vec4 fragColor;
@@ -23,32 +23,35 @@ void main()
 
     float profondeur = pos.z;
     float taille = (0.4 + (profondeur * 0.6)) * tailleParticule;
-    float alpha = 0.6 + (profondeur * 0.4);
+    float alpha = couleur.a;
 
-    mat4 camera = projection * view * model;
+    mat4 gVP = projection * view;
+    vec3 Pos = pos.xyz;
+    vec3 toCamera = normalize(cameraPos - Pos);
+    vec3 up = vec3(0.0, 1.0, 0.0);
+    vec3 right = cross(toCamera, up);
 
-    // centre la forme
-    pos.x -= taille;
-    pos.y -= taille;
 
-    // 1EME TRIANGLE
-    gl_Position = camera * pos;
+
+    Pos -= ( right * taille);
+    Pos -= (0.5*taille); // pour centrer avec les lignes
+    gl_Position = gVP * vec4(Pos, 1.0);
     fragColor = vec4(couleur.xyz, alpha);
     EmitVertex();
 
-    pos.x += taille;
-    gl_Position = camera * pos;
+    Pos.y += taille;
+    gl_Position = gVP * vec4(Pos, 1.0);
     fragColor = vec4(couleur.xyz, alpha);
     EmitVertex();
 
-    pos.x -= taille;
-    pos.y += taille;
-    gl_Position = camera * pos;
+    Pos.y -= taille;
+    Pos += (right * taille);
+    gl_Position = gVP * vec4(Pos, 1.0);
     fragColor = vec4(couleur.xyz, alpha);
     EmitVertex();
 
-    pos.x += taille;
-    gl_Position = camera * pos;
+    Pos.y += taille;
+    gl_Position = gVP * vec4(Pos, 1.0);
     fragColor = vec4(couleur.xyz, alpha);
     EmitVertex();
 

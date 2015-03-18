@@ -1,6 +1,5 @@
 #version 330
 
-
 in vec2 fragTexture;
 
 uniform sampler2D prevPosData;    // recupere les positions precedentes par la texture
