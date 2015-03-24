@@ -13,7 +13,7 @@
 #include "Noise.h"
 #include "Effet.h"
 
-#define NB 1000
+#define NB 100
 
 class Dessin
 {

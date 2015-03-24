@@ -22,9 +22,9 @@ void Forme::setup(unsigned int nb)
 {
 
     this->shader = new ofShader[5];
-    //this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
+    this->shader[0].load("shader/render.vert", "shader/render.frag", "shader/renderPoint.geom");
     this->shader[1].load("shader/render.vert", "shader/render.frag", "shader/renderCarre.geom");
-    //this->shader[2].load("shader/render.vert", "shader/render.frag", "shader/renderForme.geom");
+    this->shader[2].load("shader/render.vert", "shader/render.frag", "shader/renderForme.geom");
     this->shader[3].load("shader/render.vert", "shader/renderTexture.frag", "shader/renderImage.geom");
     //this->shader[4].load("shader/render.vert", "shader/render.frag", "shader/renderCrazy.geom");
 

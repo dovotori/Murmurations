@@ -26,6 +26,8 @@ class Forme
         inline void setRotation(float x, float y, float z){ this->rotation.set(x, y, z); };
         inline void setCouleur(float x, float y, float z, float a){ this->couleur.set(x, y, z, a); };
         inline void setTaille(float valeur){ this->taille = valeur; };
+    
+        inline unsigned int getNbRendu(){ return this->nbRendu; };
 
 
     protected:

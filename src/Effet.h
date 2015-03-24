@@ -21,9 +21,10 @@ class Effet
 
     protected:
     private:
-        ofShader shader, shader2;
-        ofFbo fbo, fbo2;
-        float cpt, noiseInfluence, noiseScale;
+        ofShader *shaders;
+        ofFbo fboPing, fboPong, fboFirst;
+        float cpt, noiseInfluence, noiseScale, blur;
+        unsigned int passages;
 };
 
 #endif // EFFET_H

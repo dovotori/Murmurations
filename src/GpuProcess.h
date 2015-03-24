@@ -40,8 +40,9 @@ public:
     inline void setMasse(float value){ this->masse = value; };
     inline void setForceMax(float value){ this->forceMax = value; };
     inline void setRayonPath(float value){ this->rayonPath = value; };
-    inline void setPath(unsigned int value){ if(value < this->nbPath){ this->path = value; } else { this->path = 0; } };
+    void setPath(unsigned int value);
 
+    inline unsigned int getNbPath(){ return this->nbPath; };
 
 protected:
 private:
@@ -70,7 +71,7 @@ private:
 
     float magnitudeNoise, masse, forceMax, rayonPath;
 
-    unsigned int path, nbPath;
+    unsigned int path, nbPath, pathNbPoints;
 
 };
 

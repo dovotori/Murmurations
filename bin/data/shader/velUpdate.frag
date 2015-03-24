@@ -152,14 +152,10 @@ vec3 flocking(vec3 pos, vec3 vel) {
     }
 
     /////////////////////// TOTAL FLOCKING ///////////////////////
-    vec3 forces = forceSeparation * flockAmplitude.x;
-    forces += forceAlignement * flockAmplitude.y;
-    forces += forceCohesion * flockAmplitude.z;
-    forces /= masse;
+    vec3 forces = ( (forceSeparation * flockAmplitude.x) + (forceAlignement * flockAmplitude.y) + (forceCohesion * flockAmplitude.z) ) / masse;
     
 
     /////////////////////// ON SORT DU CERCLE ///////////////////////
-    //*
     vec3 centreHive = vec3(0.5);
     float rayonHive = 0.3;
     float distanceHive = length(centreHive - pos);
@@ -168,13 +164,8 @@ vec3 flocking(vec3 pos, vec3 vel) {
         vec3 forceHive = seekSteering(pos, centreHive, forces, 1.0, forceMax, masse);
         forces = forceHive * dif;
     }
-    //*/
-    /*
-    vec3 centreHive = vec3(0.5);
-    float distanceHive = length(centreHive - pos);
-    vec3 forceHive = seekSteering(pos, centreHive, forces, 1.0, forceMax, masse);
-    forces = forces + ( forceHive * distanceHive * distanceHive );
-    */
+    
+    
     /////////////////////// ON APPLIQUE ///////////////////////
     vel += forces;
     vel = limiter(vel, 1.0);
@@ -224,6 +215,7 @@ vec3 attract(vec3 pos, vec3 vel)
 
 uniform float rayonPath;
 uniform int path;
+uniform int pathNbPoints;
 
 
 vec3 getPathTarget(vec3 predictionPos, vec3 origine, vec3 destination)
@@ -244,8 +236,7 @@ vec3 followPath(vec3 pos, vec3 vel)
 {
 
     vec3 predictionPos = pos; 
-
-    vec3 pointsPath[4];
+    vec3 pointsPath[20];
     switch(path)
     {
         case 0: // croissement
@@ -255,10 +246,30 @@ vec3 followPath(vec3 pos, vec3 vel)
             pointsPath[3] = vec3(0.7, 0.5, 0.2);
             break;
         case 1: // cube
-            pointsPath[0] = vec3(0.3, 0.3, 0.3);
-            pointsPath[1] = vec3(0.4, 0.3, 0.5);
-            pointsPath[2] = vec3(0.6, 0.7, 0.7);
-            pointsPath[3] = vec3(0.7, 0.5, 0.3);
+            pointsPath[0] = vec3(0.3, 0.3, 0.7);
+            pointsPath[1] = vec3(0.7, 0.3, 0.7);
+            pointsPath[2] = vec3(0.7, 0.7, 0.3);
+            pointsPath[3] = vec3(0.3, 0.7, 0.3);
+            break;
+        case 2: // carre
+            pointsPath[0] = vec3(0.3, 0.3, 0.5);
+            pointsPath[1] = vec3(0.7, 0.3, 0.5);
+            pointsPath[2] = vec3(0.7, 0.7, 0.5);
+            pointsPath[3] = vec3(0.3, 0.7, 0.5);
+            break;
+        case 3: // cercle
+            pointsPath[0] = vec3(0.5, 0.8, 0.5);
+            pointsPath[1] = vec3(0.6, 0.75, 0.5);
+            pointsPath[2] = vec3(0.75, 0.6, 0.5);
+            pointsPath[3] = vec3(0.8, 0.5, 0.5);
+            pointsPath[4] = vec3(0.75, 0.4, 0.5);
+            pointsPath[5] = vec3(0.6, 0.25, 0.5);
+            pointsPath[6] = vec3(0.5, 0.2, 0.5);
+            pointsPath[7] = vec3(0.4, 0.25, 0.5);
+            pointsPath[8] = vec3(0.25, 0.4, 0.5);
+            pointsPath[9] = vec3(0.2, 0.5, 0.5);
+            pointsPath[10] = vec3(0.25, 0.6, 0.5);
+            pointsPath[11] = vec3(0.4, 0.75, 0.5);
             break;
     }
 
@@ -267,10 +278,10 @@ vec3 followPath(vec3 pos, vec3 vel)
 
     
     int i;
-    for(i = 0; i < pointsPath.length(); i++)
+    for(i = 0; i < pathNbPoints; i++)
     {
         vec3 a = pointsPath[i];
-        vec3 b = pointsPath[(i+1)%pointsPath.length()];
+        vec3 b = pointsPath[(i+1)%pathNbPoints];
         
         vec3 normalPoint = getPathTarget(predictionPos, a, b);
 
@@ -281,8 +292,8 @@ vec3 followPath(vec3 pos, vec3 vel)
             
             normalPoint = b;
             // hors du segment, on prend le suivant
-            a = pointsPath[(i+1)%pointsPath.length()];
-            b = pointsPath[(i+2)%pointsPath.length()];
+            a = pointsPath[(i+1)%pathNbPoints];
+            b = pointsPath[(i+2)%pathNbPoints];
             dir = b - a;
         }
 
@@ -336,10 +347,12 @@ void main(void)
     vec3 pos = texture(posData, st).xyz;      // ... for getting the position data
     vec3 vel = texture(prevVelData, st).xyz;  // and the velocity
 
-    vec3 nextVel = flocking(pos, vel) * (rapportForces.x+0.0001); // peut pas etre à zero car ne repartira pas
-    nextVel += followPath(pos, vel) * (rapportForces.y+0.0001);
+    vec3 nextVel = flocking(pos, vel) * (rapportForces.x + 0.0001); // peut pas etre à zero car ne repartira pas
+    nextVel += followPath(pos, vel) * (rapportForces.y + 0.0001);
     nextVel += noiseProcess(pos) * rapportForces.z;
     nextVel += attract(pos, vel) * rapportForces.w;
+
+    nextVel = limiter(nextVel, 1.0);
 
     outputColor = vec4(nextVel, 1.0);
 

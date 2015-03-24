@@ -4,7 +4,7 @@ Echange::Echange()
 {
     //ctor
     this->btnPressed = false;
-    this->hideGui = false;
+    this->hideGui = true;
 }
 
 Echange::~Echange()
@@ -28,7 +28,7 @@ void Echange::setup()
     this->gui.add( this->masse.setup( "masse", 2.0, 0.1, 10.0 ) );
     this->gui.add( this->forceMax.setup( "forceMax", 0.1, 0.001, 1.0 ) );
     this->gui.add( this->vitesseGenerale.setup( "vitesseGenerale", 0.005, 0.001, 0.06 ) );
-    this->gui.add( this->tailleParticule.setup( "tailleParticule", 0.04, 0.001, 0.1 ) );
+    this->gui.add( this->tailleParticule.setup( "tailleParticule", 0.01, 0.001, 0.1 ) );
     this->gui.add( this->distanceLigne.setup( "distanceLigne", 0.05, 0.001, 0.1 ) );
     this->gui.add( this->rotation.setup( "rotation", ofVec3f(0.0, 0.0, 2.0), ofVec3f(-2.0), ofVec3f(2.0) ) );
     this->gui.add( this->color.setup( "color", ofColor(255,255,255,255.0), ofColor(0,0), ofColor(255,255)) );
@@ -113,7 +113,7 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         } //(float > 0.0)
         else if(argumentAdresse == "/max2P5/typeRendu")
         {
-            int rendu = m.getArgAsInt32(0); if(rendu > 3){ rendu = 3; }
+            int rendu = m.getArgAsInt32(0); if(rendu > forme->getNbRendu()-1){ rendu = 0; }
             cout << "typeRendu: " << rendu << endl;
             forme->setRendu(rendu);
         }//(entier)
@@ -123,8 +123,9 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         }//(float entre 0 et 1)
         else if(argumentAdresse == "/max2P5/rotationForme")
         {
-            cout << "rotation // X: " << m.getArgAsFloat(0)*360.0 << " // Y: " << m.getArgAsFloat(1)*360.0 << " // Z: " << m.getArgAsFloat(2)*360.0 << endl;
-            forme->setRotation(m.getArgAsFloat(0)*360.0, m.getArgAsFloat(1)*360.0, m.getArgAsFloat(2)*360.0);
+            cout << "rotation // X: " << m.getArgAsFloat(0) << " // Y: " << m.getArgAsFloat(1) << " // Z: " << m.getArgAsFloat(2) << endl;
+            //forme->setRotation(m.getArgAsFloat(0)*360.0, m.getArgAsFloat(1)*360.0, m.getArgAsFloat(2)*360.0);
+            camera->rotation(ofVec2f(m.getArgAsFloat(0), m.getArgAsFloat(1)), 2.0);
         }
 
 
@@ -162,14 +163,14 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         ////////////////////////////////////////////////////////////////
         else if(argumentAdresse == "/max2P5/pathShape")
         {
-            int shape = m.getArgAsInt32(0); if(shape > 1){ shape = 1; } if(shape < 0){ shape = 0; }
-            cout << "pathShape: " <<  shape << endl;
+            int shape = m.getArgAsInt32(0); if(shape > process->getNbPath()-1){ shape = process->getNbPath()-1; } if(shape < 0){ shape = 0; }
+            cout << "pathShape: " << shape << endl;
             process->setPath(shape);
         } //(int)
         else if(argumentAdresse == "/max2P5/pathRadius")
         {
-            cout << "pathRadius: " << m.getArgAsFloat(0)*0.001 << endl;
-            process->setRayonPath(m.getArgAsFloat(0)*0.001);
+            cout << "pathRadius: " << m.getArgAsFloat(0)*0.1 << endl;
+            process->setRayonPath(m.getArgAsFloat(0)*0.1);
         }
 
 
@@ -212,7 +213,12 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
             cout << "backgroundAlpha: " << m.getArgAsFloat(0) << endl;
             background->setAlpha(m.getArgAsFloat(0));
         } //(float entre 0 et 1)
-        else if(argumentAdresse == "/max2P5/backgroundImg"){ cout << m.getArgAsFloat(0) << endl; } //(entier)
+        else if(argumentAdresse == "/max2P5/backgroundImg")
+        {
+            int numImg = m.getArgAsInt32(0);
+            if(numImg < 0 || numImg > 2){ numImg = 0; } else { background->setImage(numImg); }
+            cout << "backgroundImg: " << numImg << endl;
+        } //(entier)
         else if(argumentAdresse == "/max2P5/noiseIntensity"){ cout << m.getArgAsFloat(0) << endl; effet->setNoiseInfluence(0.5); }
 
 

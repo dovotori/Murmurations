@@ -24,7 +24,8 @@ GpuProcess::GpuProcess()
     this->rayonPath = 0.04;
 
     this->path = 0;
-    this->nbPath = 2;
+    this->nbPath = 4;
+    this->pathNbPoints = 4;
 }
 
 GpuProcess::~GpuProcess()
@@ -190,6 +191,7 @@ void GpuProcess::computeGpuVelocity(ofTexture& texNoise)
             // path
             this->updateVel.setUniform1f("rayonPath", this->rayonPath);
             this->updateVel.setUniform1i("path", this->path);
+            this->updateVel.setUniform1i("pathNbPoints", this->pathNbPoints);
 
             this->velPingPong.src->draw(0, 0); // draw the source velocity texture to be updated
 
@@ -233,3 +235,22 @@ void GpuProcess::draw()
     this->posPingPong.src->draw(580, 0, 100, 100);
     this->velPingPong.src->draw(700, 0, 100, 100);
 }
+
+
+
+
+void GpuProcess::setPath(unsigned int value)
+{
+    if(value < this->nbPath)
+    {
+        this->path = value;
+    } else {
+        this->path = 0;
+    }
+    switch(this->path)
+    {
+        case 3: this->pathNbPoints = 12; break;
+        default: this->pathNbPoints = 4; break;
+    }
+}
+

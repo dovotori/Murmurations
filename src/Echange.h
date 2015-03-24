@@ -25,6 +25,7 @@ class Echange
         void draw();
 
         inline void toggleGui(){ this->hideGui = !this->hideGui; };
+        inline bool isHidded(){ return this->hideGui; };
 
         void buttonPressed();
 

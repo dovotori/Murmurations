@@ -47,7 +47,7 @@ void Dessin::draw(Camera* camera)
 
     this->effet.draw();
     this->echange.draw();
-    this->process.draw();
+    if(!this->echange.isHidded()){ this->process.draw(); }
 }
 
 
