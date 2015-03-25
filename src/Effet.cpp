@@ -73,8 +73,8 @@ void Effet::draw()
     this->cpt += 0.4;
     
     // noise effect
-    this->fboPong.begin();
-        ofClear(0,0,0,0);
+    //this->fboPong.begin();
+      //  ofClear(0,0,0,0);
         this->shaders[0].begin();
             this->shaders[0].setUniform1f("cpt", this->cpt);
             this->shaders[0].setUniform1f("noiseInfluence", this->noiseInfluence); // de 0 à 1
@@ -82,8 +82,9 @@ void Effet::draw()
             this->shaders[0].setUniformTexture("fboTexture", this->fboFirst.getTextureReference(0), 0);
             this->fboFirst.draw(0, 0);
         this->shaders[0].end();
-    this->fboPong.end();
+    //this->fboPong.end();
     
+    /*
     // 2ND PASS
     this->fboPing.begin();
         ofClear(0,0,0,0);
@@ -119,5 +120,5 @@ void Effet::draw()
         this->shaders[4].setUniformTexture("fboTexture2", this->fboPing.getTextureReference(0), 1);
         this->fboFirst.draw(0, 0);
     this->shaders[4].end();
-    
+    */
 }

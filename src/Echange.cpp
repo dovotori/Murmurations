@@ -135,7 +135,7 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         ////////////////////////////////////////////////////////////////
          ///////////////////////// ATTRACTION ///////////////////////////
          ////////////////////////////////////////////////////////////////
-        else if(argumentAdresse == "/max2P5/attractionRadious")
+        else if(argumentAdresse == "/max2P5/attractionRadius")
         {
             cout << "attractionRayon: " << m.getArgAsFloat(0) << endl;
             process->setRayonAttraction(m.getArgAsFloat(0));
@@ -153,7 +153,7 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         else if(argumentAdresse == "/max2P5/attractionPosition")
         {
             cout << "attractionPosition // X: " << m.getArgAsFloat(0) << " // Y: " << m.getArgAsFloat(1) << " // Z: " << m.getArgAsFloat(2) << endl;
-            process->setPosAttraction(m.getArgAsFloat(0), 1.0-m.getArgAsFloat(1), m.getArgAsFloat(2));
+            process->setPosAttraction(m.getArgAsFloat(0), m.getArgAsFloat(1), m.getArgAsFloat(2));
         }
 
 
