@@ -3,9 +3,6 @@
 Effet::Effet()
 {
     //ctor
-    this->cpt = 0.0;
-    this->noiseInfluence = 0.0;
-    this->noiseScale = 4.0;
     this->passages = 5;
     this->blur = 4.0;
 }
@@ -70,15 +67,11 @@ void Effet::end()
 
 void Effet::draw()
 {
-    this->cpt += 0.4;
     
     // noise effect
     //this->fboPong.begin();
       //  ofClear(0,0,0,0);
         this->shaders[0].begin();
-            this->shaders[0].setUniform1f("cpt", this->cpt);
-            this->shaders[0].setUniform1f("noiseInfluence", this->noiseInfluence); // de 0 à 1
-            this->shaders[0].setUniform1f("noiseScale", this->noiseScale);
             this->shaders[0].setUniformTexture("fboTexture", this->fboFirst.getTextureReference(0), 0);
             this->fboFirst.draw(0, 0);
         this->shaders[0].end();

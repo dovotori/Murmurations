@@ -98,8 +98,8 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         } //(float > 1)
         else if(argumentAdresse == "/max2P5/birdSize")
         {
-            cout << "birdSize: " << 0.001+(m.getArgAsFloat(0)*2.0) << endl;
-            forme->setTaille(0.001+(m.getArgAsFloat(0)*0.04));
+            cout << "birdSize: " << 0.001+(m.getArgAsFloat(0)*0.08) << endl;
+            forme->setTaille(0.001+(m.getArgAsFloat(0)*0.08));
         } //(float > 1)
         else if(argumentAdresse == "/max2P5/zoom")
         {
@@ -155,6 +155,11 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
             cout << "attractionPosition // X: " << m.getArgAsFloat(0) << " // Y: " << m.getArgAsFloat(1) << " // Z: " << m.getArgAsFloat(2) << endl;
             process->setPosAttraction(m.getArgAsFloat(0), m.getArgAsFloat(1), m.getArgAsFloat(2));
         }
+        else if(argumentAdresse == "/max2P5/attractorForceMax")
+        {
+            cout << "attractorForceMax: " << m.getArgAsFloat(0) << endl;
+            process->setAttractorForceMax(m.getArgAsFloat(0));
+        }
 
 
 
@@ -169,8 +174,13 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         } //(int)
         else if(argumentAdresse == "/max2P5/pathRadius")
         {
-            cout << "pathRadius: " << m.getArgAsFloat(0)*0.1 << endl;
-            process->setRayonPath(m.getArgAsFloat(0)*0.1);
+            cout << "pathRadius: " << m.getArgAsFloat(0)*0.2 << endl;
+            process->setRayonPath(m.getArgAsFloat(0)*0.2);
+        }
+        else if(argumentAdresse == "/max2P5/pathForceMax")
+        {
+            cout << "pathForceMax: " << m.getArgAsFloat(0) << endl;
+            process->setPathForceMax(m.getArgAsFloat(0));
         }
 
 
@@ -181,8 +191,8 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         ////////////////////////////////////////////////////////////////
         else if(argumentAdresse == "/max2P5/noiseMagnitude")
         {
-            cout << "noiseMagnitude: " << m.getArgAsFloat(0) << endl;
-            process->setMagnitudeNoise(m.getArgAsFloat(0));
+            cout << "noiseMagnitude: " << (m.getArgAsFloat(0))*4.0 << endl;
+            process->setMagnitudeNoise((m.getArgAsFloat(0))*4.0);
         }
 
 
@@ -192,15 +202,19 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         ////////////////////////////////////////////////////////////////
         else if(argumentAdresse == "/max2P5/flockForces")
         {
-            cout << "flockForces // X: " << m.getArgAsFloat(0) << " // Y: " << m.getArgAsFloat(1) << " // Z: " << m.getArgAsFloat(2) << endl;
-            process->setForcesFlocking(m.getArgAsFloat(0), m.getArgAsFloat(1), m.getArgAsFloat(2));
+            cout << "flockForces // X: " << m.getArgAsFloat(0) << " // Y: " << m.getArgAsFloat(1)*0.5 << " // Z: " << m.getArgAsFloat(2)*0.2 << " // A: " << m.getArgAsFloat(3)*4.0 << endl;
+            process->setForcesFlocking(m.getArgAsFloat(0), m.getArgAsFloat(1)*0.5, m.getArgAsFloat(2)*0.2, m.getArgAsFloat(3)*4.0);
         } //(float entre 0 et 1)
         else if(argumentAdresse == "/max2P5/flockDistances")
         {
-            cout << "flockDistances // X: " << m.getArgAsFloat(0)*0.4 << " // Y: " << m.getArgAsFloat(1) << " // Z: " << m.getArgAsFloat(2)*2.0 << endl;
-            process->setDistancesFlocking(m.getArgAsFloat(0)*0.4, m.getArgAsFloat(1), m.getArgAsFloat(2)*2.0);
+            cout << "flockDistances // X: " << m.getArgAsFloat(0)*0.4 << " // Y: " << m.getArgAsFloat(1) << " // Z: " << m.getArgAsFloat(2)*2.0 << " // A: " << m.getArgAsFloat(3)*0.5 << endl;
+            process->setDistancesFlocking(m.getArgAsFloat(0)*0.4, m.getArgAsFloat(1), m.getArgAsFloat(2)*2.0, m.getArgAsFloat(3)*0.5);
         } //(float entre 0 et 1)
-
+        else if(argumentAdresse == "/max2P5/flockingForceMax")
+        {
+            cout << "flockingForceMax: " << m.getArgAsFloat(0) << endl;
+            process->setFlockingForceMax(m.getArgAsFloat(0));
+        }
 
 
 
@@ -219,7 +233,12 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
             if(numImg < 0 || numImg > 2){ numImg = 0; } else { background->setImage(numImg); }
             cout << "backgroundImg: " << numImg << endl;
         } //(entier)
-        else if(argumentAdresse == "/max2P5/noiseIntensity"){ cout << m.getArgAsFloat(0) << endl; effet->setNoiseInfluence(0.5); }
+        else if(argumentAdresse == "/max2P5/noiseIntensity")
+        {
+            cout << "noiseIntensity: " << m.getArgAsFloat(0) << endl;
+            background->setNoiseInfluence(m.getArgAsFloat(0));
+            background->setNoiseScale(m.getArgAsFloat(0));
+        }
 
 
 
@@ -240,7 +259,7 @@ void Echange::updateGui(Camera *camera, GpuProcess *process, Forme *forme, Backg
     process->setVitesseGenerale(this->vitesseGenerale);
     process->setPath(this->pathShape);
     if(this->sensAttraction){ process->setSensAttraction(1.0); } else { process->setSensAttraction(-1.0); }
-    process->setDistancesFlocking(this->flockingForces->x, this->flockingForces->y, this->flockingForces->z);
+    process->setDistancesFlocking(this->flockingForces->x, this->flockingForces->y, this->flockingForces->z, 0.0);
     process->setMagnitudeNoise(this->noiseMagnitude);
     ligne->setDistance(this->distanceLigne);
     background->setImage(this->typeBackground);

@@ -15,12 +15,12 @@ GpuProcess::GpuProcess()
     this->sensAttraction = 1.0;
     this->posAttraction.set(0.5, 0.5, 0.5);
 
-    this->distancesFlocking.set(0.02, 0.1, 0.2);
-    this->forcesFlocking.set(1.0, 0.6, 0.4);
+    this->distancesFlocking.set(0.02, 0.1, 0.2, 0.5);
+    this->forcesFlocking.set(1.0, 0.6, 0.4, 0.5);
 
     this->magnitudeNoise = 1.0;
     this->masse = 4.0;
-    this->forceMax = 0.1;
+    this->forcesMax.set(0.1, 0.1, 0.1, 0.1);
     this->rayonPath = 0.04;
 
     this->path = 0;
@@ -176,10 +176,16 @@ void GpuProcess::computeGpuVelocity(ofTexture& texNoise)
             this->updateVel.setUniformTexture("posData", this->posPingPong.src->getTextureReference(), 1);  // passing the position information
             this->updateVel.setUniform4fv("rapportForces", this->rapportForces.getPtr());
             this->updateVel.setUniform1f("masse", this->masse);
-            this->updateVel.setUniform1f("forceMax", this->forceMax);
+            this->updateVel.setUniform1f("forceMax", this->forcesMax.w);
             // flock
-            this->updateVel.setUniform3fv("flockDistance", this->distancesFlocking.getPtr());
-            this->updateVel.setUniform3fv("flockAmplitude", this->forcesFlocking.getPtr());
+            this->updateVel.setUniform4fv("flockDistance", this->distancesFlocking.getPtr());
+            this->updateVel.setUniform4fv("flockAmplitude", this->forcesFlocking.getPtr());
+            this->updateVel.setUniform1f("flockingForceMax", this->forcesMax.x);
+            // path
+            this->updateVel.setUniform1f("rayonPath", this->rayonPath);
+            this->updateVel.setUniform1i("path", this->path);
+            this->updateVel.setUniform1i("pathNbPoints", this->pathNbPoints);
+            this->updateVel.setUniform1f("pathForceMax", this->forcesMax.y);
             // noise
             this->updateVel.setUniformTexture("texNoise", texNoise, 2);
             this->updateVel.setUniform1f("noiseMagnitude", this->magnitudeNoise);
@@ -188,10 +194,8 @@ void GpuProcess::computeGpuVelocity(ofTexture& texNoise)
             this->updateVel.setUniform1f("length", this->forceAttraction);
             this->updateVel.setUniform1f("radious", this->rayonAttraction);
             this->updateVel.setUniform3fv("positionAttractor", this->posAttraction.getPtr());
-            // path
-            this->updateVel.setUniform1f("rayonPath", this->rayonPath);
-            this->updateVel.setUniform1i("path", this->path);
-            this->updateVel.setUniform1i("pathNbPoints", this->pathNbPoints);
+            this->updateVel.setUniform1f("attractorForceMax", this->forcesMax.z);
+
 
             this->velPingPong.src->draw(0, 0); // draw the source velocity texture to be updated
 

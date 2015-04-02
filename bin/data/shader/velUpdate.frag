@@ -60,9 +60,9 @@ vec3 seekSteering(vec3 position, vec3 cible, vec3 vitesse, float vitesseMax, flo
 
 uniform float masse;
 uniform float forceMax;
-
-uniform vec3 flockDistance;
-uniform vec3 flockAmplitude;
+uniform float flockingForceMax;
+uniform vec4 flockDistance;
+uniform vec4 flockAmplitude;
 
 
 vec3 flocking(vec3 pos, vec3 vel) {
@@ -130,7 +130,7 @@ vec3 flocking(vec3 pos, vec3 vel) {
 
             // steer
             forceSeparation -= vel;
-            forceSeparation = limiter(forceSeparation, forceMax);
+            forceSeparation = limiter(forceSeparation, flockingForceMax);
         } 
     }
 
@@ -141,14 +141,14 @@ vec3 flocking(vec3 pos, vec3 vel) {
 
         // steer
         forceAlignement -= vel;
-        forceAlignement = limiter(forceAlignement, forceMax);
+        forceAlignement = limiter(forceAlignement, flockingForceMax);
     }
 
     // COHESION
     if(cptCohesion > 0) {
         forceCohesion /= cptCohesion;
         forceCohesion = seek(pos, forceCohesion, 1.0);
-        forceCohesion = limiter(forceCohesion, forceMax);
+        forceCohesion = limiter(forceCohesion, flockingForceMax);
     }
 
     /////////////////////// TOTAL FLOCKING ///////////////////////
@@ -156,16 +156,15 @@ vec3 flocking(vec3 pos, vec3 vel) {
     
 
     /////////////////////// ON SORT DU CERCLE ///////////////////////
+    
     vec3 centreHive = vec3(0.5);
-    float rayonHive = 0.3;
+    float rayonHive = flockDistance.w;
     float distanceHive = length(centreHive - pos);
-    if(distanceHive > rayonHive){
-        float dif = ( distanceHive - rayonHive ) * 4.0;
+    if(distanceHive > rayonHive)
+    {
         vec3 forceHive = seekSteering(pos, centreHive, forces, 1.0, forceMax, masse);
-        forces = forceHive * dif;
+        forces += forceHive * distanceHive * flockAmplitude.w;
     }
-    
-    
     /////////////////////// ON APPLIQUE ///////////////////////
     vel += forces;
     vel = limiter(vel, 1.0);
@@ -186,6 +185,7 @@ uniform float ramp;
 uniform float radious;
 uniform float strength;
 uniform vec3 positionAttractor;
+uniform float attractorForceMax;
 
 
 
@@ -216,6 +216,7 @@ vec3 attract(vec3 pos, vec3 vel)
 uniform float rayonPath;
 uniform int path;
 uniform int pathNbPoints;
+uniform float pathForceMax;
 
 
 vec3 getPathTarget(vec3 predictionPos, vec3 origine, vec3 destination)
@@ -310,7 +311,7 @@ vec3 followPath(vec3 pos, vec3 vel)
     }
 
     if (distancePlusProche > rayonPath) {
-      return seekSteering(pos, destination, vel, 1.0, forceMax, masse);
+      return seekSteering(pos, destination, vel, 1.0, pathForceMax, masse);
     } 
     else {
       return vel;
@@ -330,7 +331,7 @@ vec3 noiseProcess(vec3 pos)
 {
     vec2 st = pos.xy / noiseMagnitude;
     vec3 noise = texture(texNoise, st).xyz; // st doit etre entre 0 et 1
-    return noise;
+    return noise * vec3(-1.0, 1.0, -1.0);
 }
 
 

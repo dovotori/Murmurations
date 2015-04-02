@@ -6,6 +6,9 @@ Background::Background()
     this->alpha = 1.0;
     this->nbImages = 0;
     this->currentImage = 0;
+    this->cpt = 0.0;
+    this->noiseInfluence = 0.0;
+    this->noiseScale = 4.0;
 }
 
 
@@ -63,8 +66,12 @@ void Background::update()
 
 void Background::draw()
 {
+    this->cpt += 0.4;
 
     this->shader.begin();
+        this->shader.setUniform1f("cpt", this->cpt);
+        this->shader.setUniform1f("noiseInfluence", this->noiseInfluence); // de 0 à 1
+        this->shader.setUniform1f("noiseScale", this->noiseScale);
         this->shader.setUniform1f("alpha", this->alpha);
         this->shader.setUniformTexture("tex", this->image[this->currentImage].getTextureReference(), 0);
         this->shader.setUniform2f("resolution", ofGetWindowWidth(), ofGetWindowHeight());
