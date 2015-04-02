@@ -191,8 +191,8 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         ////////////////////////////////////////////////////////////////
         else if(argumentAdresse == "/max2P5/noiseMagnitude")
         {
-            cout << "noiseMagnitude: " << (m.getArgAsFloat(0))*4.0 << endl;
-            process->setMagnitudeNoise((m.getArgAsFloat(0))*4.0);
+            cout << "noiseMagnitude: " << (m.getArgAsFloat(0))*0.4 << endl;
+            process->setMagnitudeNoise((m.getArgAsFloat(0))*0.4);
         }
 
 

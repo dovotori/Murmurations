@@ -329,7 +329,7 @@ uniform float noiseMagnitude;
 
 vec3 noiseProcess(vec3 pos)
 {
-    vec2 st = pos.xy / noiseMagnitude;
+    vec2 st = pos.xy * noiseMagnitude;
     vec3 noise = texture(texNoise, st).xyz; // st doit etre entre 0 et 1
     return noise * vec3(-1.0, 1.0, -1.0);
 }
