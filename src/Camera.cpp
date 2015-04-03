@@ -8,6 +8,9 @@ Camera::Camera()
     this->angle = 50.0;
     this->near = 1.0;
     this->far = 100.0;
+    
+    this->anglesRotation.set(0.0, 0.0);
+    this->zoomRotation = 2.0;
 }
 
 Camera::~Camera()
@@ -36,13 +39,12 @@ void Camera::updateProjection(){
 
 
 
-void Camera::rotation(ofVec2f angle, float zoom)
+void Camera::updateRotation()
 {
-
-    angle *= 360.0;
-    float x = zoom * sin( angle.x * M_PI / 360.0 ) * cos( angle.y * M_PI / 360.0 );
-    float y = zoom * sin( angle.y * M_PI / 360.0 );
-    float z = zoom * cos( angle.x * M_PI / 360.0 ) * cos( angle.y * M_PI / 360.0 );
+    //this->anglesRotation *= 360.0;
+    float x = this->zoomRotation * sin( this->anglesRotation.x * M_PI / 360.0 ) * cos( this->anglesRotation.y * M_PI / 360.0 );
+    float y = this->zoomRotation * sin( this->anglesRotation.y * M_PI / 360.0 );
+    float z = this->zoomRotation * cos( this->anglesRotation.x * M_PI / 360.0 ) * cos( this->anglesRotation.y * M_PI / 360.0 );
 
     this->position.set(x, y, z);
     this->updateView();

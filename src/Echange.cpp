@@ -101,31 +101,36 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
             cout << "birdSize: " << 0.001+(m.getArgAsFloat(0)*0.08) << endl;
             forme->setTaille(0.001+(m.getArgAsFloat(0)*0.08));
         } //(float > 1)
-        else if(argumentAdresse == "/max2P5/zoom")
+        else if(argumentAdresse == "/max2P5/cameraZoom")
         {
-            cout << "zoom: " << 0.2+(1.0/m.getArgAsFloat(0)) << endl;
-            camera->setPosition(0.0, 0.0, 0.2+(1.0/m.getArgAsFloat(0)));
+            cout << "cameraZoom: " << (m.getArgAsFloat(0)-0.5)*20.0 << endl;
+            camera->setZoomRotation((m.getArgAsFloat(0)-0.5)*20.0);
         } //(entier)
         else if(argumentAdresse == "/max2P5/cameraAngle")
         {
             cout << "cameraAngle: " << m.getArgAsFloat(0)*200.0 << endl;
             camera->setAngle(m.getArgAsFloat(0)*200.0);
         } //(float > 0.0)
-        else if(argumentAdresse == "/max2P5/typeRendu")
+        else if(argumentAdresse == "/max2P5/birdShape")
         {
             int rendu = m.getArgAsInt32(0); if(rendu > forme->getNbRendu()-1){ rendu = 0; }
-            cout << "typeRendu: " << rendu << endl;
+            cout << "birdShape: " << rendu << endl;
             forme->setRendu(rendu);
         }//(entier)
         else if(argumentAdresse == "/max2P5/birdColor"){
             cout << "birdColor // R: " << m.getArgAsFloat(0) << " // V: " << m.getArgAsFloat(1) << " // B: " << m.getArgAsFloat(2) << " // A: " << m.getArgAsFloat(3) << endl;
             forme->setCouleur(m.getArgAsFloat(0), m.getArgAsFloat(1), m.getArgAsFloat(2), m.getArgAsFloat(3));
         }//(float entre 0 et 1)
-        else if(argumentAdresse == "/max2P5/rotationForme")
+        else if(argumentAdresse == "/max2P5/cameraPosition")
         {
-            cout << "rotation // X: " << m.getArgAsFloat(0) << " // Y: " << m.getArgAsFloat(1) << " // Z: " << m.getArgAsFloat(2) << endl;
+            cout << "cameraPosition // X: " << m.getArgAsFloat(0)*360.0 << " // Y: " << m.getArgAsFloat(1)*360.0 << endl;
             //forme->setRotation(m.getArgAsFloat(0)*360.0, m.getArgAsFloat(1)*360.0, m.getArgAsFloat(2)*360.0);
-            camera->rotation(ofVec2f(m.getArgAsFloat(0), m.getArgAsFloat(1)), 2.0);
+            camera->setAnglesRotation(m.getArgAsFloat(0)*360.0, m.getArgAsFloat(1)*360.0);
+        }
+        else if(argumentAdresse == "/max2P5/space")
+        {
+            cout << "space // X: " << m.getArgAsFloat(0) << " // Y: " << m.getArgAsFloat(1) << " // Z: " << m.getArgAsFloat(2) << endl;
+            process->setSpaceSize(m.getArgAsFloat(0), m.getArgAsFloat(1), m.getArgAsFloat(2));
         }
 
 
@@ -191,10 +196,14 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
         ////////////////////////////////////////////////////////////////
         else if(argumentAdresse == "/max2P5/noiseMagnitude")
         {
-            cout << "noiseMagnitude: " << (m.getArgAsFloat(0))*0.4 << endl;
-            process->setMagnitudeNoise((m.getArgAsFloat(0))*0.4);
+            cout << "noiseMagnitude: " << m.getArgAsFloat(0) << endl;
+            process->setMagnitudeNoise(m.getArgAsFloat(0));
         }
-
+        else if(argumentAdresse == "/max2P5/noiseDirection")
+        {
+            cout << "noiseDirection // X: " << (m.getArgAsFloat(0)-0.5)*2.0 << " // Y: " << (m.getArgAsFloat(1)-0.5)*2.0 << " // Z: " << (m.getArgAsFloat(2)-0.5)*2.0 << endl;
+            process->setNoiseDirection((m.getArgAsFloat(0)-0.5)*2.0, (m.getArgAsFloat(1)-0.5)*2.0, (m.getArgAsFloat(2)-0.5)*2.0);
+        }
 
 
         ////////////////////////////////////////////////////////////////
@@ -233,9 +242,9 @@ void Echange::updateOsc(Camera *camera, GpuProcess *process, Forme *forme, Backg
             if(numImg < 0 || numImg > 2){ numImg = 0; } else { background->setImage(numImg); }
             cout << "backgroundImg: " << numImg << endl;
         } //(entier)
-        else if(argumentAdresse == "/max2P5/noiseIntensity")
+        else if(argumentAdresse == "/max2P5/backgroundNoise")
         {
-            cout << "noiseIntensity: " << m.getArgAsFloat(0) << endl;
+            cout << "backgroundNoise: " << m.getArgAsFloat(0) << endl;
             background->setNoiseInfluence(m.getArgAsFloat(0));
             background->setNoiseScale(m.getArgAsFloat(0));
         }
@@ -271,7 +280,7 @@ void Echange::updateGui(Camera *camera, GpuProcess *process, Forme *forme, Backg
 
     if(this->btnPressed){ process->resetPosition(0); process->resetVelocity(); this->btnPressed = false; }
 
-    camera->rotation(ofVec2f(this->rotation->x, this->rotation->y), this->rotation->z);
+    //camera->rotation(ofVec2f(this->rotation->x, this->rotation->y), this->rotation->z);
 
 }
 

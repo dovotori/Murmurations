@@ -35,6 +35,8 @@ public:
     inline void setForceAttraction(float value){ this->forceAttraction = value; };
     inline void setRayonAttraction(float value){ this->rayonAttraction = value; };
     inline void setPosAttraction(float x, float y, float z){ this->posAttraction.set(x,y,z); };
+    inline void setSpaceSize(float x, float y, float z){ this->spaceSize.set(x,y,z); };
+    inline void setNoiseDirection(float x, float y, float z){ this->noiseDirection.set(x,y,z); };
 
     inline void setMagnitudeNoise(float value){ this->magnitudeNoise = value; };
     inline void setMasse(float value){ this->masse = value; };
@@ -68,7 +70,7 @@ private:
     ofVec4f rapportForces;
 
     float forceAttraction, rayonAttraction, sensAttraction;
-    ofVec3f posAttraction;
+    ofVec3f posAttraction, spaceSize, noiseDirection;
 
     ofVec4f distancesFlocking, forcesFlocking, forcesMax;
 

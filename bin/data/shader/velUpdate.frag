@@ -326,12 +326,13 @@ vec3 followPath(vec3 pos, vec3 vel)
 
 uniform sampler2D texNoise;
 uniform float noiseMagnitude;
+uniform vec3 noiseDirection;
 
 vec3 noiseProcess(vec3 pos)
 {
     vec2 st = pos.xy * noiseMagnitude;
     vec3 noise = texture(texNoise, st).xyz; // st doit etre entre 0 et 1
-    return noise * vec3(-1.0, 1.0, -1.0);
+    return noise * noiseDirection;
 }
 
 

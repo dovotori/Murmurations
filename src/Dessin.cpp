@@ -19,7 +19,7 @@ void Dessin::setup()
     cout << "Texture resolution: " << closestPowerOfTwo << endl;
     cout << "Nombre de particules: " << closestPowerOfTwo*closestPowerOfTwo << endl;
 
-    this->noise.setup(256);
+    this->noise.setup(1024);
     this->process.setup(closestPowerOfTwo);
     this->forme.setup(closestPowerOfTwo);
     this->background.setup();
@@ -48,6 +48,8 @@ void Dessin::draw(Camera* camera)
     this->effet.draw();
     this->echange.draw();
     if(!this->echange.isHidded()){ this->process.draw(); }
+    
+    this->noise.draw();
 }
 
 

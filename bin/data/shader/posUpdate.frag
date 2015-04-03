@@ -6,6 +6,7 @@ uniform sampler2D prevPosData;    // recupere les positions precedentes par la t
 uniform sampler2D velData;        // recupere la texture de la vitesse
 uniform float vitesseGenerale;
 uniform int resolution;
+uniform vec3 space;
 
 out vec4 outputColor;
 
@@ -21,13 +22,13 @@ void main(void)
     pos += vel * vitesseGenerale;
 
     // RESPAWN A L'AUTRE BOUT
-    if(pos.x > 1.0){ pos.x = 0.0; }
-    if(pos.y > 1.0){ pos.y = 0.0; }
-    if(pos.z > 1.0){ pos.z = 0.0; }
+    if(pos.x > 0.5+(space.x*0.5)){ pos.x = 0.5-(space.x*0.5); }
+    if(pos.y > 0.5+(space.y*0.5)){ pos.y = 0.5-(space.y*0.5); }
+    if(pos.z > 0.5+(space.z*0.5)){ pos.z = 0.5-(space.z*0.5); }
 
-    if(pos.x < 0.0){ pos.x = 1.0; }
-    if(pos.y < 0.0){ pos.y = 1.0; }
-    if(pos.z < 0.0){ pos.z = 1.0; }
+    if(pos.x < 0.5-(space.x*0.5)){ pos.x = 0.5+(space.x*0.5); }
+    if(pos.y < 0.5-(space.y*0.5)){ pos.y = 0.5+(space.y*0.5); }
+    if(pos.z < 0.5-(space.z*0.5)){ pos.z = 0.5+(space.z*0.5); }
 
     outputColor = vec4(pos, 1.0);
 

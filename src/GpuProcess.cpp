@@ -9,7 +9,8 @@ GpuProcess::GpuProcess()
     //ctor
     this->vitesseGenerale = 0.005;
     this->rapportForces.set(1.0, 0.0, 0.0, 0.0);
-
+    this->spaceSize.set(1.0, 1.0, 1.0);
+    
     this->forceAttraction = 1.0;
     this->rayonAttraction = 0.5;
     this->sensAttraction = 1.0;
@@ -19,6 +20,8 @@ GpuProcess::GpuProcess()
     this->forcesFlocking.set(1.0, 0.6, 0.4, 0.5);
 
     this->magnitudeNoise = 1.0;
+    this->noiseDirection.set(1.0, 1.0, 1.0);
+    
     this->masse = 4.0;
     this->forcesMax.set(0.1, 0.1, 0.1, 0.1);
     this->rayonPath = 0.04;
@@ -189,6 +192,7 @@ void GpuProcess::computeGpuVelocity(ofTexture& texNoise)
             // noise
             this->updateVel.setUniformTexture("texNoise", texNoise, 2);
             this->updateVel.setUniform1f("noiseMagnitude", this->magnitudeNoise);
+            this->updateVel.setUniform3fv("noiseDirection", this->noiseDirection.getPtr());
             // attractor
             this->updateVel.setUniform1f("ramp", this->sensAttraction);
             this->updateVel.setUniform1f("length", this->forceAttraction);
@@ -222,6 +226,7 @@ void GpuProcess::computeGpuPosition()
             this->updatePos.setUniformTexture("prevPosData", this->posPingPong.src->getTextureReference(), 0); // Précendentes positions
             this->updatePos.setUniformTexture("velData", this->velPingPong.src->getTextureReference(), 1);  // Vitesses
             this->updatePos.setUniform1f("vitesseGenerale", this->vitesseGenerale );
+            this->updatePos.setUniform3fv("space", this->spaceSize.getPtr() );
             this->posPingPong.src->draw(0, 0); // draw fbo source dans le fbo destination
 
         this->updatePos.end();
